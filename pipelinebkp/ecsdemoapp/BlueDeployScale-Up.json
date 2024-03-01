@@ -1,0 +1,73 @@
+{
+ "appConfig": {},
+ "application": "ecsdemoapp",
+ "disabled": false,
+ "id": "7af296ff-7d22-4a6b-8787-473c41da3a9f",
+ "index": 2,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "BlueDeployScale-Up",
+ "parameterConfig": [
+  {
+   "default": "100",
+   "description": "",
+   "hasOptions": false,
+   "label": "Scale Number",
+   "name": "number",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "action": "scale_up",
+   "capacity": {},
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "ecsdemoapp-ecs-bluedeploy",
+   "credentials": "ecswurmdev",
+   "moniker": {
+    "app": "ecsdemoapp",
+    "cluster": "ecsdemoapp-ecs-bluedeploy",
+    "detail": "bluedeploy",
+    "stack": "ecs"
+   },
+   "name": "Resize Server Group",
+   "refId": "5",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [],
+   "resizeType": "incr",
+   "scaleNum": "${parameters.number}",
+   "target": "current_asg_dynamic",
+   "targetHealthyDeployPercentage": 100,
+   "type": "resizeServerGroup"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Pipeline",
+   "pipeline": "6205381c-d306-4d9f-a270-b0208aa434af",
+   "pipelineParameters": {
+    "blueweight": "1",
+    "greenweight": "0"
+   },
+   "refId": "6",
+   "requisiteStageRefIds": [
+    "5"
+   ],
+   "type": "pipeline",
+   "waitForCompletion": true
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1648107815089"
+}

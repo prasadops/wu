@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><md:EntityDescriptor entityID="http://www.okta.com/exk1wurted3DWu1GM5d7" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"><md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="signing"><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509Data><ds:X509Certificate>MIIDqDCCApCgAwIBAgIGAXvdEP0EMA0GCSqGSIb3DQEBCwUAMIGUMQswCQYDVQQGEwJVUzETMBEG
+A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
+MBIGA1UECwwLU1NPUHJvdmlkZXIxFTATBgNVBAMMDGRldi05MDA0MTE2MzEcMBoGCSqGSIb3DQEJ
+ARYNaW5mb0Bva3RhLmNvbTAeFw0yMTA5MTMwMjUwMjNaFw0zMTA5MTMwMjUxMjNaMIGUMQswCQYD
+VQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsG
+A1UECgwET2t0YTEUMBIGA1UECwwLU1NPUHJvdmlkZXIxFTATBgNVBAMMDGRldi05MDA0MTE2MzEc
+MBoGCSqGSIb3DQEJARYNaW5mb0Bva3RhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+ggEBAIqm4BSDUthVKGhcnUtII6bzqFc0iftzRbIuyxFiiFQ3b6Yy0MuRIT5ilNHdMs42Sml/ihce
+EqHNNTc2Sl/BrcTVN1pNExIBDD4KCiTjzIsk8n8zZFtrE81JafurFuqgD0cVb/RnXsch4IQLxphR
+pQtAT35qcdrW6OlJyc8yBorThmVHJs1XN50XH6mLBkmAUOut4FRQdLcCcl3aK0wOujp/lqzf9211
+TmlCB+YXgUvjbbQA1BJ0JJ08jl2aqmISiH+pYcB+BQp0ZtLodwbHQYH1QxGm3en47c+PmRDEgFaz
+gv2rIm1T18vgilanF/fIfNzQrFUckrrHzspWE1bPOZUCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA
+PJlv7hStrs8xoWKiKLpR13bPBY8wHcTDWUi4dBhdPanjIdN8NVyFx9vzDzyulZsOJrLr2kCl6GSR
+BD1PgraTuiu5uw8v5Gq0KredOL0MsoKkXRoOGKmW/OgjAsm3DHH3sBmEnqgo4Yss/KqcmrUNWu2P
+c6Yf5+CFq3k6stSEqO6gZ9xcn8y/1EP4yJkOpqybIku9H2Kw5//1C51uC5txa3U6Vt2b127uYUNJ
+6sSqv+HYiuyno+0Sh24uWl7nYCLm/MnnJ3FYnLgfs/cF5TkHSwxo+nfNsSchI4B9Cdl5Pyr5YmyY
+1TnwUZ2Cd9biqvpDFoOYEnlw484fpcSpWqzg8g==</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://dev-90041163.okta.com/app/dev-90041163_wurmoes_2/exk1wurted3DWu1GM5d7/sso/saml"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://dev-90041163.okta.com/app/dev-90041163_wurmoes_2/exk1wurted3DWu1GM5d7/sso/saml"/></md:IDPSSODescriptor></md:EntityDescriptor>

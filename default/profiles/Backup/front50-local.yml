@@ -1,0 +1,62 @@
+migrations:
+  migrateToManagedServiceAccounts: true
+policy:
+  opa:
+    enabled: true
+    url: http://oes-sapor.oes:8085
+spinnaker:
+  migration:
+    enabled: false
+    entityTags:
+      enabled: false
+    compositeStorageService:
+      enabled: false
+  s3:
+    enabled: false
+sql:
+  enabled: true
+  connectionPools:
+    default:
+      jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/front50?enabledTLSProtocols=TLSv1.2 
+      maxLifetimeMs: 59990
+      connectionTimeoutMs: 5000
+      validationTimeoutMs: 5000
+      minIdle: 25
+      maxPoolSize: 25
+      user: front50_service
+      password: OpsMx2021
+  migration:
+    jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/front50?enabledTLSProtocols=TLSv1.2 
+    user: front50_migrate
+    password: OpsMx2021
+
+
+  extensibility:
+    plugins-root-path: /opt/front50/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-front50
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: true
+                
+    repositories:
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json
+
+
+management:
+  metrics.distribution:
+    percentiles[http.server.requests]: 0.95, 0.99
+    percentiles-histogram[http.server.requests]: true
+    sla[http.server.requests]: 300ms, 500ms
+  endpoints.web:
+    exposure.include: health,info,aop-prometheus
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: prometheus_metrics
+  server.port: 8008

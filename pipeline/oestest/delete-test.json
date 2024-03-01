@@ -1,0 +1,21 @@
+{
+ "application": "oestest",
+ "id": "5e1bfbe1-5c60-44e7-b5a6-94239ca6ca54",
+ "index": 5,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "delete-test",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "Wait",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "wait",
+   "waitTime": 30
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1637128618972"
+}

@@ -1,0 +1,13 @@
+{
+ "application": "oestest",
+ "id": "8a9676ba-0d71-484f-ba10-47d62b055146",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "prod-test",
+ "spelEvaluator": "v4",
+ "stages": [],
+ "triggers": [],
+ "updateTs": "1638776773515"
+}

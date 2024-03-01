@@ -1,0 +1,31 @@
+{
+ "application": "terraformdemo",
+ "disabled": true,
+ "id": "476fd9e2-a4e4-475f-8130-e4af369e918a",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "terraformpipe",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "alias": "preconfiguredJob",
+   "name": "Terraform Plan",
+   "parameters": {
+    "artifactid": "appdemo1",
+    "location": "aws",
+    "overridefile": "",
+    "repo": "yugaa22/terraform-shell.git",
+    "scriptaccount": "anoop-tfartifact-account",
+    "stateaccount": "anoop-tfartifact-account",
+    "staterepo": "yugaa22/terraform-shell.git"
+   },
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "Terraform Plan"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1638884691185"
+}

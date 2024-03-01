@@ -1,0 +1,732 @@
+--- 
+audit: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8097"
+  config: {}
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-audit-service
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+auditClient: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8098"
+  config: {}
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-audit-client
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+autopilot: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8090"
+  config: 
+    buildAnalysis: 
+      enabled: false
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-autopilot
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+dashboard: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8094"
+  config: 
+    app: 
+      sync: 
+        enabled: true
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-dashboard
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+datascience: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "5005"
+  config: {}
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-datascience
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+db: 
+  enabled: false
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-db
+    tag: v3.0.0
+  password: OpsMx2021
+  podManagementPolicy: OrderedReady
+  securityContext: 
+    fsGroup: 1000
+  serviceAnnotations: {}
+  storageMountSize: 8Gi
+  url: "jdbc:postgresql://oes-postgres-13-instance-1.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:5432"
+  username: postgres
+elasticsearch: 
+  minimumMasterNodes: 1
+  replicas: 1
+  resources: 
+    requests: 
+      cpu: 100m
+      memory: 1Gi
+enableCentralLogging: false
+forwarder: 
+  agent: 
+    host: opsmx-controller-controller1
+    image: "quay.io/opsmxpublic/forwarder-agent:v3.12.0"
+    serviceType: LoadBalancer
+  enabled: true
+  externalName: wurm-controller.opsmx.net
+  image: 
+    pullPolicy: IfNotPresent
+    repository: quay.io/opsmxpublic/forwarder-controller
+    tag: v3.12.0
+  serviceAnnotations: {}
+gate: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8084"
+  config: 
+    agentAPI: false
+    fileBasedAuthentication: 
+      enabled: false
+    oauth2: 
+      client: 
+        accessTokenUri: "https://github.com/login/oauth/access_token"
+        clientId: ~
+        clientSecret: ~
+        scope: user-email
+        userAuthorizationUri: "https://github.com/login/oauth/authorize"
+      enabled: false
+      provider: GITHUB
+      resource: 
+        userInfoUri: "https://api.github.com/user"
+      userInfoMapping: 
+        email: email
+        firstName: firstname
+        lastName: name
+        username: login
+    saml: 
+      enabled: true
+      issuerId: oeswurm
+      jksSecretName: oessamljks
+      keyStore: /opt/spinnaker/saml/oessaml.jks
+      keyStoreAliasName: saml
+      keyStorePassword: changeit
+      metadataSecretName: oesmetadataxml
+      metadataUrl: /opt/spinnaker/saml/oesmetadata.xml
+      redirectBasePath: /
+      redirectHostname: oesgate.wurm.opsmx.net
+      redirectProtocol: https
+      userSource: gate
+    server: 
+      session: 
+        timeoutInSeconds: 7200
+    webhooks: false
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-gate
+    tag: v3.12.0.1
+  resources: {}
+  serviceAnnotations: {}
+global: 
+  autoConfiguration: 
+    enabled: false
+    initContainer: 
+      externalIpCheckDelay: 180
+      image: "quay.io/opsmxpublic/oes-init:v4"
+      pullPolicy: IfNotPresent
+  certManager: 
+    installed: true
+  commonGate: 
+    enabled: false
+    spinnakerKayanta: false
+    spinnakerRBAC: true
+  createIngress: true
+  customCerts: 
+    enabled: false
+    secretName: oes-cacerts
+  customImages: 
+    registry: quay.io/opsmxpublic
+  enableCentralMonitoring: false
+  installOpenLdap: false
+  ldap: 
+    enabled: false
+    groupRoleAttributes: cn
+    groupSearchBase: "ou=groups,dc=example,dc=org"
+    groupSearchFilter: "member={0}"
+    managerDn: "cn=admin,dc=example,dc=org"
+    managerPassword: opsmxadmin123
+    url: "ldap://{{ .Release.Name }}-openldap:389"
+    userDnPattern: "cn={0},dc=example,dc=org"
+  minio: 
+    accessKey: spinnakeradmin
+    affinity: {}
+    buckets: 
+      - 
+        name: spinnaker
+        policy: none
+        purge: false
+      - 
+        name: autopilot
+        policy: none
+        purge: false
+    defaultBucket: 
+      enabled: true
+      name: spinnaker
+    enabled: false
+    image: 
+      repository: quay.io/opsmxpublic/minio
+      tag: RELEASE.2020-01-03T19-12-21Z
+    mcImage: 
+      repository: quay.io/opsmxpublic/minio-mc
+      tag: RELEASE.2020-11-25T23-04-07Z
+    nodeSelector: {}
+    persistence: 
+      enabled: true
+      size: 10Gi
+    region: us-east-1
+    secretKey: spinnakeradmin
+    securityContext: 
+      enabled: true
+      fsGroup: 1000
+      runAsGroup: 1000
+      runAsUser: 1000
+    service: 
+      type: ClusterIP
+    tolerations: []
+  oesGate: 
+    host: oesgate.wurm.opsmx.net
+    ingress: 
+      annotations: 
+        kubernetes.io/ingress.class: nginx
+      tls: 
+        secretName: oes-gate-authtls
+    protocol: https
+  oesUI: 
+    host: oesui.wurm.opsmx.net
+    ingress: 
+      annotations: 
+        kubernetes.io/ingress.class: nginx
+      tls: 
+        secretName: oes-ui-authtls
+    protocol: https
+  preDeleteHelmHooks: true
+  spinDeck: 
+    host: spindeck.wurm.opsmx.net
+    ingress: 
+      annotations: 
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+      tls: 
+        secretName: deck-authtls
+    protocol: https
+    serviceAnnotations: {}
+  spinGate: 
+    host: spingate.wurm.opsmx.net
+    ingress: 
+      annotations: 
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+      tls: 
+        secretName: gate-authtls
+    protocol: https
+    serviceAnnotations: {}
+  ssl: 
+    enabled: true
+imageCredentials: 
+  registry: quay.io/opsmxpublic
+  repoUrl: "https://quay.io/"
+imagePullSecret: opsmx11-secret
+installRedis: true
+installSpinnaker: true
+installationMode: OES-AP
+k8sServiceType: ClusterIP
+kibana: 
+  lifecycle: 
+    postStart: 
+      exec: 
+        command: 
+          - bash
+          - "-c"
+          - "until curl localhost:5601; do echo \"Waiting for Kibana to be available...\"; sleep 5; done; until curl elasticsearch-master:9200; do echo \"Waiting for Elasticsearch to be available...\"; sleep 5; done; sleep 60; curl https://raw.githubusercontent.com/OpsMx/enterprise-spinnaker/master/scripts/kibana/kibana_objects.ndjson > /tmp/kibana_objects.ndjson; curl -X POST \"localhost:5601/api/saved_objects/_import?overwrite=true\" -H \"kbn-xsrf: true\" --form file=@/tmp/kibana_objects.ndjson 2>&1 1> /tmp/postStart.out;\n"
+  resources: 
+    requests: 
+      cpu: 100m
+      memory: 250Mi
+  service: 
+    type: LoadBalancer
+oesAutoConfiguration: true
+opa: 
+  enabled: true
+  image: 
+    pullPolicy: IfNotPresent
+    repository: openpolicyagent/opa
+    tag: latest
+openldap: 
+  adminPassword: opsmxadmin123
+  affinity: {}
+  configPassword: opsmxconfig123
+  customLdifFiles: 
+    01-memberof.ldif: |-
+        dn: cn=module,cn=config
+        cn: module
+        objectClass: olcModuleList
+        olcModuleLoad: memberof.la
+        olcModulePath: /usr/lib/ldap
+        
+        dn: olcOverlay={0}memberof,olcDatabase={1}hdb,cn=config
+        objectClass: olcConfig
+        objectClass: olcMemberOf
+        objectClass: olcOverlayConfig
+        objectClass: top
+        olcOverlay: memberof
+        olcMemberOfDangling: ignore
+        olcMemberOfRefInt: TRUE
+        olcMemberOfGroupOC: groupOfNames
+        olcMemberOfMemberAD: member
+        olcMemberOfMemberOfAD: memberOf
+    02-refint1.ldif: |-
+        dn: cn=module{1},cn=config
+        changetype: modify
+        add: olcmoduleload
+        olcmoduleload: refint.la
+    03-refint2.ldif: |-
+        dn: olcOverlay={1}refint,olcDatabase={1}hdb,cn=config
+        objectClass: olcConfig
+        objectClass: olcOverlayConfig
+        objectClass: olcRefintConfig
+        objectClass: top
+        olcOverlay: {1}refint
+        olcRefintAttribute: memberof member manager owner
+    04-add_ou.ldif: |-
+        dn: ou=groups,dc=example,dc=org
+        objectClass: organizationalUnit
+        ou: Groups
+    05-admin.ldif: |-
+        dn: cn=admin,ou=groups,dc=example,dc=org
+        objectClass: groupofnames
+        cn: admin
+        description: read write and execute group
+        member: cn=admin,dc=example,dc=org
+    06-developer.ldif: |-
+        dn: cn=developers,ou=groups,dc=example,dc=org
+        objectClass: groupofnames
+        cn: developers
+        description: read only users
+        member: cn=admin,dc=example,dc=org
+        member: cn=developer,dc=example,dc=org
+    07-qa.ldif: |-
+        dn: cn=QA,ou=groups,dc=example,dc=org
+        objectClass: groupofnames
+        cn: QA
+        description: read only users
+        member: cn=admin,dc=example,dc=org
+        member: cn=qa,dc=example,dc=org
+    08-manager.ldif: |-
+        dn: cn=managers,ou=groups,dc=example,dc=org
+        objectClass: groupofnames
+        cn: managers
+        description: read and execute group
+        member: cn=admin,dc=example,dc=org
+        member: cn=manager,dc=example,dc=org
+    09-IT-manager.ldif: |-
+        dn: cn=ITManagers,ou=groups,dc=example,dc=org
+        objectClass: groupofnames
+        cn: ITManagers
+        description: read and execute group
+        member: cn=admin,dc=example,dc=org
+        member: cn=ITManager,dc=example,dc=org
+    10-users.ldif: |-
+        dn: cn=user1,dc=example,dc=org
+        objectClass: simpleSecurityObject
+        objectClass: organizationalRole
+        cn: user1
+        userpassword: {SSHA}Y9L4AsYL16WLK10qDZ62pTScFnaWb0nz
+        
+        dn: cn=user2,dc=example,dc=org
+        objectClass: simpleSecurityObject
+        objectClass: organizationalRole
+        cn: user2
+        userpassword: {SSHA}DasTBI0eut1F83Bh1F1HXmDT8juJj3pY
+        
+        dn: cn=user3,dc=example,dc=org
+        objectClass: simpleSecurityObject
+        objectClass: organizationalRole
+        cn: user3
+        userpassword: {SSHA}Qu1FW7BdLMndwM/Gf+zc3a8VIMAymbuv
+        
+        dn: cn=developers,ou=groups,dc=example,dc=org
+        changetype: modify
+        add: member
+        member: cn=user1,dc=example,dc=org
+        member: cn=user3,dc=example,dc=org
+        
+        dn: cn=QA,ou=groups,dc=example,dc=org
+        changetype: modify
+        add: member
+        member: cn=user2,dc=example,dc=org
+        member: cn=user3,dc=example,dc=org
+  env: 
+    LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
+  omitClusterIP: true
+  persistence: 
+    enabled: false
+  tolerations: []
+platform: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8095"
+  config: 
+    adminGroups: "admin,OpsMx-DevOps"
+    supportedFeatures: 
+      - deployment_verification
+      - sapor
+      - visibility
+    userSource: ldap
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-platform
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+rabbitmq: 
+  image: 
+    registry: quay.io/opsmxpublic/rabbitmq
+    repository: 3-management
+  password: Networks123
+  port: 5672
+  serviceAnnotations: {}
+  url: rabbitmq-service
+  username: rabbitmq
+rbac: 
+  create: true
+redis: 
+  cluster: 
+    enabled: false
+  configmap: |-
+      # Enable AOF https://redis.io/topics/persistence#append-only-file
+      appendonly no
+      # Disable RDB persistence, AOF persistence already enabled.
+      save 60 1000
+  external: 
+    host: <EXTERNAL-REDIS-HOST-NAME>
+    port: 6379
+  image: 
+    registry: quay.io/opsmxpublic
+    repository: bitnami-redis
+  master: 
+    affinity: {}
+    tolerations: []
+  nodeSelector: {}
+  password: password
+  port: 6379
+  url: "redis://:password@{{ .Release.Name }}-redis-master"
+sapor: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8085"
+  config: 
+    datasources: 
+      platform: true
+    encrypt: 
+      enabled: true
+      key: Q7udUkHPuA3VnNlOtksSgQ
+      salt: deadbeef
+    spinnaker: 
+      authnEnabled: true
+      x509: 
+        client: 
+          password: changeit
+        enabled: false
+    spinnakerImages: OPSMX
+    sync: 
+      permission: 
+        enabled: true
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-sapor
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+saporgate: 
+  config: 
+    password: saporadmin
+    username: anoop@opsmx.io
+  enabled: true
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-spin-gate
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}
+secretStore: db
+spinnaker: 
+  affinity: {}
+  autoInstallSampleApps: false
+  azs: 
+    enabled: false
+  dockerRegistries: 
+    - 
+      address: index.docker.io
+      name: dockerhub
+      repositories: 
+        - library/alpine
+        - library/ubuntu
+        - library/centos
+        - library/nginx
+  enableHA: true
+  gcs: 
+    bucket: <GCS-BUCKET-NAME>
+    enabled: false
+    jsonKey: "<INSERT CLOUD STORAGE JSON HERE>"
+    project: my-project-name
+    secretName: ~
+  gitopsHalyard: 
+    enabled: true
+    gatex509: 
+      enabled: false
+      host: spingate-x509.domain.com
+    mTLS: 
+      enabled: false
+    pipelinePromotion: 
+      AWS_ACCESS_KEY_ID: access_key
+      AWS_SECRET_ACCESS_KEY: secret_key
+      apiUrl: "https://api.github.com/repos"
+      approverToken: token
+      approvingUser: approver_user
+      autoApprovePR: false
+      baseUrl: github.com
+      branch: master
+      createPR: false
+      enabled: true
+      gitConfig: "git config --global http.sslVerify false"
+      organization: OpsMx
+      repository: WU-RM-Repo
+      rootFolder: pipeline/
+      targetBranch: master
+      token: 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
+      type: git
+      usermail: anoop@opsmx.io
+      username: anooptejt
+    repo: 
+      baseUrlHostName: github.com
+      configArgs: http.sslVerify=false
+      dynAccntConfigPath: dynaccount/
+      dynamicAccRepository: WU-RM-Repo
+      halConfigBranch: master
+      halConfigPath: /
+      organization: OpsMx
+      projectName: ""
+      repository: WU-RM-Repo
+      s3accesskey: AWS_ACCESS_KEY_ID
+      s3bucket: "bucket name.e.g-testbucket"
+      s3region: regionofbucket
+      s3secretkey: AWS_SECRET_ACCESS_KEY
+      token: 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
+      type: git
+      username: hanumeshc
+    secretName: opsmx-gitops-auth
+    spinnakerLBCheckDelay: 1
+  halyard: 
+    additionalConfigMaps: 
+      create: false
+      data: {}
+    additionalProfileConfigMaps: 
+      data: 
+        echo-local.yml: 
+          microsoftteams: 
+            enabled: true
+          rest: 
+            enabled: true
+            endpoints: 
+              - 
+                url: "http://oes-audit-service:8097/auditservice/v1/echo/events/data"
+                wrap: false
+              - 
+                url: "http://oes-sapor:8085/oes/echo"
+                wrap: false
+        fiat-local.yml: 
+          auth: 
+            groupMembership: 
+              ldap: 
+                groupRoleAttributes: cn
+                groupSearchBase: "ou=groups,dc=example,dc=org"
+                groupSearchFilter: "member={0}"
+                managerDn: "cn=admin,dc=example,dc=org"
+                managerPassword: opsmxadmin123
+                url: "ldap://RELEASE_NAME-openldap:389"
+                userDnPattern: "cn={0},dc=example,dc=org"
+              service: ldap
+        front50-local.yml: 
+          policy: 
+            opa: 
+              enabled: true
+              url: "http://oes-sapor.{{ .Release.Namespace }}:8085"
+        gate-local.yml: 
+          server: 
+            tomcat: 
+              httpsServerPort: X-Forwarded-Port
+              internalProxies: .*
+              protocolHeader: X-Forwarded-Proto
+              remoteIpHeader: X-Forwarded-For
+          spinnaker: 
+            extensibility: 
+              deck-proxy: 
+                enabled: true
+                plugins: 
+                  Opsmx.CustomStagePlugin: 
+                    enabled: true
+                    version: "1.0.1"
+                  Opsmx.PolicyGatePlugin: 
+                    enabled: true
+                    version: "1.0.1"
+                  Opsmx.TestVerificationGatePlugin: 
+                    enabled: true
+                    version: "1.0.1"
+                  Opsmx.VerificationGatePlugin: 
+                    enabled: true
+                    version: "1.0.1"
+                  Opsmx.VisibilityApprovalPlugin: 
+                    enabled: true
+                    version: "1.0.1"
+              plugins: ~
+              repositories: 
+                opsmx-repo: 
+                  url: "https://raw.githubusercontent.com/opsmx/spinnakerPluginRepository/v3.9.0/plugins.json"
+    additionalScripts: 
+      configMapKey: config.sh
+      configMapName: my-halyard-config
+      create: false
+      data: {}
+      enabled: false
+    additionalSecrets: 
+      create: false
+      data: {}
+    additionalServiceSettings: 
+      clouddriver-caching.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-clouddriver:8.0.4-1"
+      clouddriver-ro-deck.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-clouddriver:8.0.4-1"
+      clouddriver-ro.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-clouddriver:8.0.4-1"
+      clouddriver-rw.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-clouddriver:8.0.4-1"
+      clouddriver.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-clouddriver:8.0.4-1"
+      deck.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-oes-deck:3.5.1"
+      echo-scheduler.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-echo:2.17.1"
+      echo-worker.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-echo:2.17.1"
+      echo.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-echo:2.17.1"
+      fiat.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-fiat:1.16.0"
+      front50.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-oes-front50:0.27.1-opa"
+      gate.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-oes-spin-gate:1.22.1"
+        healthEndpoint: /health
+        kubernetes: 
+          useExecHealthCheck: false
+      igor.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-igor:1.16.0"
+      kayenta.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-kayenta:0.21.0"
+      orca.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-oes-orca:2.20.4"
+      rosco.yml: 
+        artifactId: "quay.io/opsmxpublic/ubi8-spin-rosco:0.25.0"
+    customCerts: 
+      enabled: false
+      secretName: custom-cacerts
+    image: 
+      repository: quay.io/opsmxpublic/ubi8-spin-halyard
+      tag: opsmx-1.40.0
+    persistence: 
+      enabled: true
+    resources: {}
+    spinnakerVersion: "1.26.6"
+  kubeConfig: 
+    contexts: 
+      - default
+    deploymentContext: default
+    enabled: false
+    omittedNameSpaces: 
+      - kube-system
+      - kube-public
+    onlySpinnakerManaged: 
+      enabled: true
+    secretKey: config
+    secretName: my-kubeconfig
+  nodeSelector: {}
+  rbac: 
+    create: true
+  s3: 
+    bucket: <S3-BUCKET-NAME>
+    enabled: false
+  securityContext: 
+    fsGroup: 1000
+    runAsUser: 1000
+  serviceAccount: 
+    create: true
+    halyardName: ~
+    spinnakerName: ~
+  spinCli: 
+    auth: 
+      basic: 
+        password: saporadmin
+        username: anoop@opsmx.io
+      enabled: true
+    gate: 
+      endpoint: "http://oes-gate:8084"
+  spinnakerFeatureFlags: []
+  tolerations: []
+ui: 
+  config: 
+    setApplicationRefreshInterval: 300000
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-ui
+    tag: v3.12.0
+  serviceAnnotations: {}
+vault: 
+  address: "https://server.vaultint.opsmx.net"
+  enterpriseEdition: false
+  namespace: admin/isd-platform
+  token: 123132
+visibility: 
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8096"
+  config: 
+    configuredConnectors: "JIRA,GIT,AUTOPILOT,SONARQUBE,JENKINS,AQUAWAVE"
+    logLevel: ERROR
+  image: 
+    pullPolicy: IfNotPresent
+    repository: ubi8-oes-visibility
+    tag: v3.12.0
+  resources: {}
+  serviceAnnotations: {}

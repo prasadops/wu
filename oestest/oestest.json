@@ -1,0 +1,16 @@
+{
+ "accounts": "awswurmdev,jan10-account,jan18-awsaccount,jan19-aws-account,jan21-aws-account,jan7-aws-account",
+ "cloudProviders": "aws,ecs,kubernetes",
+ "createTs": "1632138547920",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "hanumesh.c7@gmail.com",
+ "instancePort": 80,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "name": "oestest",
+ "trafficGuards": [],
+ "updateTs": "1641563240232",
+ "user": "hanumesh.kumar@opsmx.io"
+}

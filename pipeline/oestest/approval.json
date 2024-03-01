@@ -1,0 +1,120 @@
+{
+ "application": "oestest",
+ "id": "885ec2fd-e543-4515-948c-5c37ced5b6f4",
+ "index": 2,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "approval",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "approvegate",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "SONARQUBE",
+      "helpText": "Sonarqube",
+      "isMultiSupported": false,
+      "label": "Sonarqube",
+      "supportedParams": [
+       {
+        "helpText": "Project Key",
+        "label": "Project Key",
+        "name": "projectKey",
+        "type": "array"
+       }
+      ],
+      "values": [
+       {
+        "projectKey": "OES-UI,oes-visibility-v3.10"
+       }
+      ]
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/1/trigger",
+    "imageIds": "nginx:1.14.2"
+   },
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "approval"
+  },
+  {
+   "name": "Wait",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "wait",
+   "waitTime": 3
+  },
+  {
+   "name": "testgate12",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "SONARQUBE",
+      "helpText": "Sonarqube",
+      "isMultiSupported": false,
+      "label": "Sonarqube",
+      "supportedParams": [
+       {
+        "helpText": "Project Key",
+        "label": "Project Key",
+        "name": "projectKey",
+        "type": "array"
+       }
+      ],
+      "values": [
+       {
+        "projectKey": "OES-UI"
+       }
+      ]
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/6/trigger",
+    "imageIds": "alpine"
+   },
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "approval"
+  },
+  {
+   "name": "myapprovegate",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "SONARQUBE",
+      "helpText": "Sonarqube",
+      "isMultiSupported": false,
+      "label": "Sonarqube",
+      "supportedParams": [
+       {
+        "helpText": "Project Key",
+        "label": "Project Key",
+        "name": "projectKey",
+        "type": "array"
+       }
+      ],
+      "values": [
+       {
+        "projectKey": "OES-UI,oes-visibility-v3.10"
+       }
+      ]
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/7/trigger",
+    "imageIds": "alpine"
+   },
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "type": "approval"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1637579492030"
+}

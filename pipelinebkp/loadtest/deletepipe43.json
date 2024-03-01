@@ -1,0 +1,40 @@
+{
+ "application": "loadtest",
+ "id": "e938ec8f-8317-464d-97dc-53fa2878524a",
+ "index": 138,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "deletepipe43",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "loadtest-pipe43-deploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "loadtest",
+    "cluster": "loadtest-pipe43-deploy",
+    "detail": "deploy",
+    "stack": "pipe43"
+   },
+   "name": "Destroy Server Group",
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [],
+   "target": "current_asg_dynamic",
+   "type": "destroyServerGroup"
+  }
+ ],
+ "triggers": [
+  {
+   "enabled": true,
+   "source": "deleteall",
+   "type": "webhook"
+  }
+ ],
+ "updateTs": "1636100333000"
+}

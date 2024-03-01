@@ -1,0 +1,194 @@
+{
+ "application": "demoapp",
+ "id": "431d221f-f177-4e32-8987-46bcf4f6a530",
+ "index": 3,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "yugandhar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "Terraform",
+ "parameterConfig": [
+  {
+   "default": "aws-tf-role",
+   "description": "",
+   "hasOptions": false,
+   "label": "AWS account name",
+   "name": "aws_account_name",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "anoop-tfartifact-account",
+   "description": "",
+   "hasOptions": false,
+   "label": "Tf script account",
+   "name": "script_account",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "OpsMx/staging-terraform-pm.git",
+   "description": "",
+   "hasOptions": false,
+   "label": "Tf script Repo",
+   "name": "script_repo",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "oes",
+   "description": "",
+   "hasOptions": false,
+   "label": "Spinnaker Namespace ",
+   "name": "namespace",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "aws/ec2-role",
+   "description": "",
+   "hasOptions": false,
+   "label": "Tf Location",
+   "name": "tf_location",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "opsmx-ec2",
+   "description": "",
+   "hasOptions": false,
+   "label": "Artifact UUId",
+   "name": "uuid",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "",
+   "description": "",
+   "hasOptions": false,
+   "label": "Override file",
+   "name": "overrde_file",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "alias": "preconfiguredJob",
+   "name": "Terraform Plan",
+   "parameters": {
+    "artifactid": "${parameters.uuid}",
+    "awsrole": "${parameters.aws_account_name}",
+    "location": "${parameters.tf_location}",
+    "namespace": "${parameters.namespace}",
+    "overridefile": "",
+    "repo": "${parameters.script_repo}",
+    "scriptaccount": "${parameters.script_account}",
+    "stateaccount": "${parameters.script_account}",
+    "staterepo": "${parameters.script_repo}"
+   },
+   "refId": "3",
+   "requisiteStageRefIds": [],
+   "type": "Terraform Plan"
+  },
+  {
+   "alias": "preconfiguredJob",
+   "name": "Terraform Apply",
+   "parameters": {
+    "artifactid": "${parameters.uuid}",
+    "awsrole": "${parameters.aws_account_name}",
+    "location": "${parameters.tf_location}",
+    "namespace": "${parameters.namespace}",
+    "overridefile": "",
+    "repo": "${parameters.script_repo}",
+    "scriptaccount": "${parameters.script_account}",
+    "stateaccount": "${parameters.script_account}",
+    "staterepo": "${parameters.script_repo}"
+   },
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "5"
+   ],
+   "type": "Terraform Apply"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [],
+   "name": "Manual Judgment",
+   "notifications": [],
+   "refId": "5",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [],
+   "name": "Manual Judgment",
+   "notifications": [],
+   "refId": "6",
+   "requisiteStageRefIds": [
+    "4"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "alias": "preconfiguredJob",
+   "name": "Terraform Destroy",
+   "parameters": {
+    "artifactid": "${parameters.uuid}",
+    "awsrole": "${parameters.aws_account_name}",
+    "location": "${parameters.tf_location}",
+    "namespace": "${parameters.namespace}",
+    "overridefile": "",
+    "repo": "${parameters.script_repo}",
+    "scriptaccount": "${parameters.script_account}",
+    "stateaccount": "${parameters.script_account}",
+    "staterepo": "${parameters.script_repo}"
+   },
+   "refId": "7",
+   "requisiteStageRefIds": [
+    "6"
+   ],
+   "type": "Terraform Destroy"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1639400174614"
+}

@@ -1,0 +1,241 @@
+{
+ "application": "mynewdemoapp",
+ "id": "27368980-6e40-4f9b-853d-3b3ba69c0834",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "mynewdemopipe",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "default",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "annotations": {
+       "artifact.spinnaker.io/location": "default",
+       "artifact.spinnaker.io/name": "opsmx-restapp",
+       "artifact.spinnaker.io/type": "kubernetes/deployment",
+       "artifact.spinnaker.io/version": "",
+       "deployment.kubernetes.io/revision": "2"
+      },
+      "labels": {
+       "app.kubernetes.io/managed-by": "spinnaker",
+       "app.kubernetes.io/name": "multiclouddemo"
+      },
+      "name": "opsmx-jfrog-restapp",
+      "namespace": "default"
+     },
+     "spec": {
+      "replicas": 1,
+      "selector": {
+       "matchLabels": {
+        "app": "opsmx-jfrog-restapp"
+       }
+      },
+      "strategy": {
+       "rollingUpdate": {
+        "maxSurge": "25%",
+        "maxUnavailable": "25%"
+       },
+       "type": "RollingUpdate"
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "app": "opsmx-jfrog-restapp"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "image": "opsmx.jfrog.io/restapp/opsmx11/restapp:${trigger[\"properties\"][\"Buildnumber\"]}",
+          "imagePullPolicy": "Always",
+          "name": "restapp",
+          "ports": [
+           {
+            "containerPort": 8080,
+            "name": "http",
+            "protocol": "TCP"
+           },
+           {
+            "containerPort": 9090,
+            "name": "prometheus",
+            "protocol": "TCP"
+           }
+          ],
+          "resources": {},
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File"
+         }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "imagePullSecrets": [
+         {
+          "name": "jfrog"
+         }
+        ],
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "terminationGracePeriodSeconds": 30
+       }
+      }
+     }
+    },
+    {
+     "apiVersion": "v1",
+     "kind": "Service",
+     "metadata": {
+      "name": "opsmx-jfrog-restapp-service"
+     },
+     "spec": {
+      "ports": [
+       {
+        "name": "canary",
+        "port": 8080,
+        "protocol": "TCP",
+        "targetPort": 8080
+       },
+       {
+        "name": "reports",
+        "port": 9090,
+        "protocol": "TCP",
+        "targetPort": 9090
+       }
+      ],
+      "selector": {
+       "app": "opsmx-jfrog-restapp"
+      },
+      "type": "LoadBalancer"
+     }
+    }
+   ],
+   "moniker": {
+    "app": "mynewdemoapp"
+   },
+   "name": "Deploy (Manifest)",
+   "namespaceOverride": "default",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "failOnFailedExpressions": true,
+   "name": "Evaluate Variables",
+   "refId": "3",
+   "requisiteStageRefIds": [],
+   "type": "evaluateVariables",
+   "variables": [
+    {
+     "key": "BuildInfo",
+     "value": "${trigger[\"properties\"][\"Buildnumber\"]}"
+    }
+   ]
+  },
+  {
+   "name": "Approvegate",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "SONARQUBE",
+      "helpText": "Sonarqube",
+      "isMultiSupported": true,
+      "label": "Sonarqube",
+      "supportedParams": [
+       {
+        "helpText": "Branch Name",
+        "label": "Branch Name",
+        "name": "branch",
+        "type": "string"
+       },
+       {
+        "helpText": "Project Key",
+        "label": "Project Key",
+        "name": "projectKey",
+        "type": "array"
+       }
+      ],
+      "values": []
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/14/trigger",
+    "imageIds": ""
+   },
+   "payloadConstraint": [],
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "approval"
+  },
+  {
+   "name": "bld-approve",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "JENKINS",
+      "helpText": "Jenkins",
+      "isMultiSupported": true,
+      "label": "Jenkins",
+      "supportedParams": [
+       {
+        "helpText": "Job Name",
+        "label": "Job Name",
+        "name": "job",
+        "type": "string"
+       },
+       {
+        "helpText": "Build",
+        "label": "Build",
+        "name": "buildId",
+        "type": "string"
+       },
+       {
+        "helpText": "Artifact",
+        "label": "Artifact",
+        "name": "artifact",
+        "type": "string"
+       }
+      ],
+      "values": []
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/15/trigger",
+    "imageIds": ""
+   },
+   "payloadConstraint": [],
+   "refId": "5",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "type": "approval"
+  }
+ ],
+ "triggers": [
+  {
+   "enabled": true,
+   "job": "Dev-Restapp-Jfrog-pipeline",
+   "master": "opsmxdevjenkins",
+   "propertyFile": "file.properties",
+   "runAsUser": "27368980-6e40-4f9b-853d-3b3ba69c0834@managed-service-account",
+   "type": "jenkins"
+  }
+ ],
+ "updateTs": "1645725758103"
+}

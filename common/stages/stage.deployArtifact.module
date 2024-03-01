@@ -1,0 +1,26 @@
+{
+  "name": "Deploy (Manifest)",
+  "namespaceOverride": "{{ var "namespace" }}",
+  "application": "{{ var "application" }}",
+  "refId": "stage-deployartifact-module",
+  "account": "{{ var "deployArtifactTo" }}-{{ var "location" }}",
+  "cloudProvider": "kubernetes",
+  "manifestArtifactId": "{{ var "helmChartArtifactId" }}",
+  "moniker": {
+    "app": "{{ var "applicationName" }}"
+  },
+  "requiredArtifactIds": [
+    "{{ var "dockerImageArtifactId" }}"
+  ],
+  "requiredArtifacts": [],
+  "requisiteStageRefIds": {{ var "requisiteStageRefIds" ?: [] }},
+  "skipExpressionEvaluation": false,
+  "source": "artifact",
+  "trafficManagement": {
+    "enabled": false,
+    "options": {
+      "enableTraffic": false
+    }
+  },
+  "type": "deployManifest"
+}

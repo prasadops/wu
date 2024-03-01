@@ -1,0 +1,4 @@
+{
+ "accounts": "aws-tf-role,awswurmdev",
+ "name": "eks"
+}

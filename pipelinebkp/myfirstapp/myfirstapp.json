@@ -1,0 +1,33 @@
+{
+ "accounts": "bluegreenk8s,myaccount",
+ "cloudProviders": "kubernetes,aws",
+ "createTs": "1633608747144",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "mahesh.kota@opsmx.io",
+ "name": "myfirstapp",
+ "permissions": {
+  "EXECUTE": [
+   "admin",
+   "qa",
+   "devops"
+  ],
+  "READ": [
+   "admin",
+   "qa",
+   "devops"
+  ],
+  "WRITE": [
+   "admin",
+   "devops"
+  ]
+ },
+ "platformHealthOnly": true,
+ "trafficGuards": [],
+ "updateTs": "1638953279852",
+ "user": "mahesh.kota@opsmx.io"
+}

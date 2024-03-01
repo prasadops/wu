@@ -1,0 +1,98 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "26addeb7-56cd-4df0-94b3-b2bc9f9a9d19",
+ "index": 3,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "mumbai-deploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "aws",
+   "cloudProviderType": "aws",
+   "name": "Find Image from Tags",
+   "packageName": "ami-039965b6f048fd074",
+   "refId": "1",
+   "regions": [
+    "ap-south-1"
+   ],
+   "requisiteStageRefIds": [],
+   "tags": {},
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "awswurmdev",
+     "application": "ec2bakedeploy",
+     "availabilityZones": {
+      "ap-south-1": [
+       "ap-south-1a",
+       "ap-south-1b",
+       "ap-south-1c"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "aws",
+     "cooldown": 10,
+     "copySourceCustomBlockDeviceMappings": false,
+     "delayBeforeDisableSec": 0,
+     "delayBeforeScaleDownSec": 0,
+     "ebsOptimized": false,
+     "enabledMetrics": [],
+     "freeFormDetails": "amideploy",
+     "healthCheckGracePeriod": 600,
+     "healthCheckType": "EC2",
+     "iamRole": "ec2-instance",
+     "instanceMonitoring": false,
+     "instanceType": "t2.micro",
+     "keyPair": "ec2-user",
+     "loadBalancers": [
+      "ec2bakedeploy-wolters-clb"
+     ],
+     "maxRemainingAsgs": 2,
+     "moniker": {
+      "app": "ec2bakedeploy",
+      "detail": "amideploy",
+      "stack": "mumbai"
+     },
+     "provider": "aws",
+     "rollback": {
+      "onFailure": true
+     },
+     "scaleDown": false,
+     "securityGroups": [
+      "sg-019c55f3c2e1fb6b9"
+     ],
+     "spotPrice": "",
+     "stack": "mumbai",
+     "strategy": "redblack",
+     "subnetType": "srini-web-alb",
+     "suspendedProcesses": [],
+     "tags": {
+      "Name": "Wolters Deploy Testing"
+     },
+     "targetGroups": [],
+     "targetHealthyDeployPercentage": 100,
+     "terminationPolicies": [
+      "Default"
+     ],
+     "useAmiBlockDeviceMappings": false
+    }
+   ],
+   "name": "Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1643278699012"
+}

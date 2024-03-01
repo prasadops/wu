@@ -1,0 +1,7 @@
+deploy-green-ingress
+deleteservices
+deploy-green&routetraffice
+deploy-blue-ingress
+deploy-blue-green-ingress
+deleteall
+findartifacts

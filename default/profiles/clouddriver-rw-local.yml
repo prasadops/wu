@@ -1,0 +1,139 @@
+aws:
+  metrics:
+    enabled: false
+  features:
+    cloudFormation:
+      enabled: true
+spectator: 
+  ext: 
+    aws: 
+      enabled: false
+serviceLimits: 
+  cloudProviderOverrides: 
+    aws: 
+      client: 
+        maxErrorRetry: 30
+      rateLimit: 15
+    implementationLimits: 
+      AmazonElasticLoadBalancing: 
+        defaults: 
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+      AWSSecretsManager:
+        defaults:
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+      AWSApplicationAutoScaling:
+        defaults:
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+      AWSApplicationAutoScalingClientBuilder:
+        defaults:
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+      AmazonCloudFormation:
+        defaults:
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+      AmazonCloudFormationClientBuilder:
+        defaults:
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+      AmazonEC2:
+        defaults:
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+      AmazonEC2ClientBuilder:
+        defaults:
+          client: 
+            maxErrorRetry: 30
+          rateLimit: 15
+okHttpClient:
+  readTimeoutMs: 120000
+  connectTimeoutMs: 120000
+  maxRequests: 256
+  maxRequestsPerHost: 256
+  # readTimeoutMs: 59000
+  # connectTimeoutMs: 59000
+kubernetes:
+  custom-property-binding-enabled: true
+server.max-http-header-size: 512000
+logging:
+  level:
+    # Enable debug logging by changing level to DEBUG
+    root: INFO
+sql:
+  enabled: true
+  taskRepository:
+    enabled: true
+  agent:
+    max-concurrent-agents: 2000
+    zombie-threshold-ms: 3600000
+    poll:
+      timeout-seconds: 600
+      interval-seconds: 300
+  cache:
+    enabled: true
+    readBatchSize: 500
+    writeBatchSize: 300
+  scheduler:
+    enabled: true
+  connectionPools:
+    default:
+      default: true
+      jdbcUrl: jdbc:mysql://spin-db-wurm.cluster-cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+      user: clouddriver_service
+      password: OpsMx2021
+    tasks:
+      user: clouddriver_service
+      password: OpsMx2021
+      jdbcUrl: jdbc:mysql://spin-db-wurm.cluster-cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+  migration:
+    user: clouddriver_migrate
+    password: OpsMx2021
+    jdbcUrl: jdbc:mysql://spin-db-wurm.cluster-cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+
+redis:
+  enabled: false
+  cache:
+    enabled: false
+  scheduler:
+    enabled: false
+  taskRepository:
+    enabled: false
+
+spinnaker:
+  extensibility:
+    plugins-root-path: /opt/clouddriver/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-clouddriver-rw
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: false
+                
+    repositories:
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json
+
+management:
+  metrics.distribution:
+    percentiles[http.server.requests]: 0.95, 0.99
+    percentiles-histogram[http.server.requests]: true
+  endpoints.web:
+    exposure.include: health,info,aop-prometheus
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: aop-prometheus
+  server.port: 8008        

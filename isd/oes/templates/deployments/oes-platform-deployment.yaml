@@ -1,0 +1,93 @@
+---
+# Source: oes/templates/deployments/oes-platform-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    moniker.spinnaker.io/application: isd
+  labels:
+    app: oes
+    component: platform
+    heritage: "Helm"
+    release: "oes"
+    chart: "oes-4.0.21"
+  name: oes-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oes
+      component: platform
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: 4f4f82026e7ecf0811b74948d22600bacccd47052e0bdfaec6367253f2f1a9dc
+        moniker.spinnaker.io/application: isd
+        prometheus.io/scrape: "true"
+        prometheus_io_path: /mgmt/prometheus
+        prometheus_io_port: "8095"
+      labels:
+        app: oes
+        component: platform
+        heritage: "Helm"
+        release: "oes"
+        chart: "oes-4.0.21"
+    spec:
+      containers:
+      - image: quay.io/opsmxpublic/ubi8-oes-platform:v4.0.3.1-rc5
+        name: oes-platform
+        ports:
+        - containerPort: 8095
+          protocol: TCP
+        env:
+        resources:
+            {}
+        readinessProbe:
+          tcpSocket:
+            port: 8095
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /mgmt/health
+            port: 8095
+          initialDelaySeconds: 60
+          periodSeconds: 60
+        volumeMounts:
+        - mountPath: /opsmx/conf/platform-local.yml
+          name: platform-config-volume
+          subPath: platform-local.yml
+        - mountPath: /opsmx/conf/bootstrap.yml
+          name: bootstrap-config-volume
+          subPath: bootstrap.yml
+        - mountPath: /opsmx/conf/standard-error-code.csv
+          name: standard-error-conf
+          subPath: standard-error-codes.csv
+        - mountPath: /opsmx/conf/feature.yml
+          name: isd-feature-flag-conf
+          subPath: feature.yml
+      volumes:
+      - name: platform-config-volume
+        secret:
+          secretName: oes-platform-config
+      - secret:
+          items:
+          - key: bootstrap.yml
+            path: bootstrap.yml
+          secretName: bootstrap
+        name: bootstrap-config-volume
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: standard-error-codes.csv
+            path: standard-error-codes.csv
+          name: standard-error-codes-config
+        name: standard-error-conf
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: feature.yml
+            path: feature.yml
+          name: isd-feature-flag-config
+        name: isd-feature-flag-conf

@@ -1,0 +1,16 @@
+{
+ "cloudProviders": "aws,kubernetes",
+ "createTs": "1644866207162",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "parametersapp",
+ "repoType": "bitbucket",
+ "trafficGuards": [],
+ "updateTs": "1650374594175",
+ "user": "anoop@opsmx.io"
+}

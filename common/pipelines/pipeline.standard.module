@@ -1,0 +1,175 @@
+{{- range $i, $loc := makeSlice "westus" "eastus" }}
+{{ if $i }},{{ end }}
+{
+  "application": "{{ var "application" }}",
+  "name": "{{ var "applicationName" }}-{{ . }}",
+  "expectedArtifacts": [
+    {
+      "displayName": "docker-image",
+      "id": "{{ var "dockerImageArtifactId" }}",
+      "defaultArtifact": {
+        "artifactAccount": "docker-registry",
+        "name": "{{var "dockerRegistry" }}/{{ var "appCode" }}/{{ var "applicationName" }}",
+        "type": "docker/image",
+        "reference": "{{var "dockerRegistry" }}/{{ var "appCode" }}/{{ var "applicationName" }}",
+        "version": "{{ var "imageTag" ?: "" }}"
+      },
+      "matchArtifact": {
+        "artifactAccount": "docker-registry",
+        "name": "{{var "dockerRegistry" }}/{{ var "appCode" }}/{{ var "applicationName" }}",
+        "type": "docker/image"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "limitConcurrent": true,
+  "locked": {
+    "allowUnlockUi": true,
+    "description": "",
+    "ui": true
+  },  
+  "notifications": [
+    {
+      "address": "{{ var "notificationAddress" ?: "Platform.DevOps@Albertsons.com" }}",
+      "cc": "{{ var "notificationCCAddress" ?: "" }}",
+      "level": "pipeline",
+      "message": {
+        "pipeline.starting": {
+          "text": ""
+        }
+      },
+      "type": "email",
+      "when": [
+        "pipeline.starting",
+        "pipeline.complete",
+        "pipeline.failed"
+      ]
+    }
+  ],
+  "parameterConfig": [
+    {
+      "default": "{{ var "applicationName" }}",
+      "description": "Application Name",
+      "hasOptions": false,
+      "label": "Application Name",
+      "name": "AppName",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "{{ var "appNamespace" }}",
+      "description": "Namespace to deploy application into",
+      "hasOptions": false,
+      "label": "Namespace to deploy application into",
+      "name": "Namespace",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "{{ var "helmChartName" }}",
+      "description": "Helm Chart Name",
+      "hasOptions": false,
+      "label": "Helm Chart Name",
+      "name": "HelmChart",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "{{ var "env" }}",
+      "description": "Environment name",
+      "hasOptions": false,
+      "label": "Environment name",
+      "name": "Environment",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "{{ var "generatorNamespace" ?: "default" }}",
+      "description": "Namespace for helm3-generator",
+      "hasOptions": false,
+      "label": "Namespace for helm3-generator",
+      "name": "GeneratorNamespace",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": false,
+      "required": true
+    }
+  ],
+  "spelEvaluator": "v4",
+  "stages": [
+    {{ 
+      module "common/stages/stage.customHelm3Render.module"
+      "deployTo" "prod-tools"
+      "location" .
+      "generatorNamespace" "${trigger['parameters'].GeneratorNamespace}"
+      "chartName" "${trigger['parameters'].HelmChart}"
+      "appName" "${trigger['parameters'].AppName}"
+      "namespace" "${trigger['parameters'].Namespace}"
+    }},
+    {{
+      module "common/stages/stage.deployArtifact.module"
+      "location" .
+      "namespace" "${trigger['parameters'].Namespace}"
+      "appMoniker" "${trigger['parameters'].AppName}"
+      "requisiteStageRefIds" ["stage-helm3-module"]
+    }},
+    {{
+      module "common/stages/stage.findHelm3RenderJob.module"
+      "requisiteStageRefIds" ["stage-deployartifact-module"]
+    }},
+    {{
+      module "common/stages/stage.deleteHelm3RenderJob.module"
+      "deployTo" "prod-tools"
+      "generatorNamespace" "${trigger['parameters'].GeneratorNamespace}"
+      "location" .
+      "requisiteStageRefIds" ["stage-findhelm3renderjob-module"]
+    }}
+  ],
+  "triggers": [
+    {
+      "account": "{{ var "registryAccount" }}",
+      "enabled": {{ var "triggerOnDocker" ?: false }},
+      "expectedArtifactIds": [
+        "{{ var "dockerImageArtifactId" }}"
+        ],
+      "organization": "{{var "appCode" }}",
+      "registry": "{{ var "dockerRegistry" }}",
+      "repository": "{{ var "appCode" }}/{{ var "applicationName" }}",
+      "tag": "",
+      "type": "docker"
+    },
+    {
+      "enabled": {{ var "triggerOnJenkins" ?: false }},
+      "expectedArtifactIds": [],
+      "job": "{{ var "jobName" }}/{{ var "applicationName" }}",
+      "master": "jenkins",
+      "type": "jenkins"
+    }
+  ]
+}
+{{- end }}

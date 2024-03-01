@@ -1,0 +1,86 @@
+spinnaker:
+  extensibility:
+    plugins-root-path: /opt/fiat/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-fiat
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: true
+    repositories:
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json
+        
+management:
+  endpoints.web:
+    exposure.include: health,info
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: prometheus_metrics
+auth:
+  groupMembership:
+    service: file
+    file:
+      path: /opt/spinnaker/config/fiat-permissions.yml
+fiat.redis:
+  repository:
+    checkLastModifiedTimeout: PT0.5S
+    getPermissionTimeout: PT2S
+fiat.restrictApplicationCreation: true
+auth.permissions.provider.application: aggregate
+auth.permissions.source.application.prefix:
+   enabled: true
+   prefixes:
+    - prefix: "*"   # “all” applications. it is possible to restrict application creation based on regex
+      permissions:
+        CREATE:
+        - "spin-admn"   #Only users who belong to “spin-admn” can create an application
+        - "spin-rwx"
+        READ:
+        - "spin-admn"
+        - "spin-rwx"
+        WRITE:
+        - "spin-admn"
+        - "spin-rwx"
+        EXECUTE:
+        - "spin-admn"
+        - "spin-rwx"
+    - prefix: "dev*"   # "all" applications. it is possible to restrict application creation based on regex
+      permissions:
+        CREATE:
+        - "spin-dev"   #Users who belong to “spin-dev” can create an application with "dev"
+        READ:
+        - "spin-dev"
+        WRITE:
+        - "spin-dev"
+        EXECUTE:
+        - "spin-dev"
+    - prefix: "qa*"   # "all" applications. it is possible to restrict application creation based on regex
+      permissions:
+        CREATE:
+        - "spin-QA"   #Users who belong to “spin-QA” can create an application with "dev"
+        READ:
+        - "spin-QA"
+        WRITE:
+        - "spin-QA"
+        EXECUTE:
+        - "spin-QA"
+    - prefix: "prod-*"   # “all” applications. it is possible to restrict application creation based on regex
+      permissions:
+        CREATE:
+        - "spin-admn" #Only users who belong to "spin-admn" can create an application with "prod"
+        READ:
+        - "spin-admn"
+        - "spin-rwx"
+        - "spin-dev"
+        - "spin-QA"
+        WRITE:
+        - "spin-admn"
+        - "spin-rwx"
+        EXECUTE:
+        - "spin-admn"
+        - "spin-rwx"

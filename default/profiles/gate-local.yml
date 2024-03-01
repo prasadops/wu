@@ -1,0 +1,63 @@
+redis:
+    configuration:
+         secure:
+              true
+server:
+  tomcat:
+    httpsServerPort: X-Forwarded-Port
+    internalProxies: .*
+    protocolHeader: X-Forwarded-Proto
+    remoteIpHeader: X-Forwarded-For
+spinnaker:
+  extensibility:
+    plugins-root-path: /opt/spinnaker/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-gate
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: false
+    deck-proxy:
+      enabled: true
+      plugins:
+        Opsmx.VerificationGatePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.TestVerificationGatePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.PolicyGatePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.CustomStagePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.VisibilityApprovalPlugin:
+          enabled: true
+          version: 1.0.1
+        Aws.LambdaDeploymentPlugin:
+          enabled: true
+          version: 1.0.6          
+    repositories:
+      opsmx-repo:
+        #url: file:///opt/spinnaker/plugins/plugins.json
+        url: https://raw.githubusercontent.com/OpsMx/spinnakerPluginRepository/v3.12.0/plugins.json
+      awsLambdaDeploymentPluginRepo:
+        url: https://raw.githubusercontent.com/spinnaker-plugins/aws-lambda-deployment-plugin-spinnaker/1.0.6/plugins.json 
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json
+
+management:
+  metrics.distribution:
+    percentiles[http.server.requests]: 0.95, 0.99
+    percentiles-histogram[http.server.requests]: true
+  endpoints.web:
+    exposure.include: health,info,aop-prometheus
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: aop-prometheus
+  server.port: 8008

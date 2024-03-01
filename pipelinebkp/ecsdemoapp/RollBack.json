@@ -1,0 +1,61 @@
+{
+ "application": "ecsdemoapp",
+ "id": "9f493f3f-ca5b-44a9-8248-a716c9d90ccd",
+ "index": 7,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "RollBack",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "ecsdemoapp-ecs-bluedeploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "ecsdemoapp",
+    "cluster": "ecsdemoapp-ecs-bluedeploy",
+    "detail": "bluedeploy",
+    "stack": "ecs"
+   },
+   "name": "RollBack/Scale Down Blue",
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "target": "current_asg_dynamic",
+   "type": "disableServerGroup"
+  },
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "imageLabelOrSha": "nginx",
+   "name": "Find Image from Tags",
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "type": "findImageFromTags"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Pipeline",
+   "pipeline": "6205381c-d306-4d9f-a270-b0208aa434af",
+   "pipelineParameters": {
+    "blueweight": "0",
+    "greenweight": "1"
+   },
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "pipeline",
+   "waitForCompletion": true
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1648107331256"
+}

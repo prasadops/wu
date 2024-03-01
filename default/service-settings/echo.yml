@@ -1,0 +1,13 @@
+#artifactId: quay.io/opsmxpublic/ubi8-spin-echo:v3.12.0
+#artifactId: quay.io/opsmxpublic/ubi8-spin-echo:1.27.0-v4.0-alpha
+artifactId: quay.io/opsmxpublic/ubi8-spin-echo:v3.12-opt
+env:
+  JAVA_OPTS: "-XX:MaxRAMPercentage=100.0"
+kubernetes:
+  podAnnotations:
+    moniker.spinnaker.io/application: spin
+    prometheus.io/path: /aop-prometheus
+    prometheus.io/port: '8008'
+    prometheus.io/scrape: 'true'    
+  useExecHealthCheck: true
+  customHealthCheckExecCommands: ["wget", "--no-check-certificate", "--spider", "-q", "http://localhost:8008/health"] 

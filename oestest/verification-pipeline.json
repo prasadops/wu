@@ -1,0 +1,32 @@
+{
+ "application": "oestest",
+ "id": "ae516858-0cc7-4dbf-a67b-47009246b34c",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "verification-pipeline",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "verificationgate",
+   "parameters": {
+    "baselinestarttime": "1612551864500",
+    "canaryresultscore": "90",
+    "canarystarttime": "1612554760315",
+    "gate": "verificationgate",
+    "gateurl": "https://oesgate.wurm.opsmx.net/autopilot/api/v3/registerCanary",
+    "imageids": "alpine",
+    "lifetime": "0.5",
+    "log": "true",
+    "metric": "true",
+    "minicanaryresult": "70"
+   },
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "verification"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1642595137764"
+}

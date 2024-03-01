@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
+    cert-manager.io/issuer: caissuer
+    kubernetes.io/ingress.class: nginx
+  name: oes-ui-ingress
+  namespace: oes
+spec:
+  rules:
+  - host: oesui.wurm.opsmx.net
+    http:
+      paths:
+      - backend:
+          service:
+            name: oes-ui
+            port:
+              number: 8080
+        path: /
+        pathType: ImplementationSpecific
+

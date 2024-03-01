@@ -1,0 +1,98 @@
+{
+  "name": "{{ var "renderJobName" ?: "Render Helm3" }}",
+  "application": "{{ var "application" }}",
+  "propertyFile": "helm3-generator",
+  "refId": "stage-helm3-module",
+  "requisiteStageRefIds": {{ var "requisiteStageRefIds" ?: [] }},
+  "source": "text",
+  "alias": "runJob",
+  "type": "runJobManifest",
+  "account": "{{ var "deployTo" }}-{{ var "location" }}",
+  "cloudProvider": "kubernetes",
+  "consumeArtifactSource": "propertyFile",
+  "credentials": "{{ var "deployTo" }}-{{ var "location" }}",
+  "expectedArtifacts": [
+    {
+      "displayName": "{{ var "chartDisplayName" ?: "helm-chart" }}",
+      "id": "{{ var "helmChartArtifactId" }}",
+      "matchArtifact": {
+        "artifactAccount": "embedded-artifact",
+        "name": "chart",
+        "type": "embedded/base64"
+      },
+      "useDefaultArtifact": false,
+      "usePriorArtifact": false
+    }
+  ],
+  "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+      "name": "helm3-generator",
+      "namespace": "{{ var "generatorNamespace" ?: "default" }}"
+    },
+    "spec": {
+      "backoffLimit": 0,
+      "template": {
+        "spec": {
+          "containers": [
+            {
+              "env": [
+                {
+                  "name": "GIT_USERNAME",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "key": "username",
+                      "name": "git-creds"
+                    }
+                  }
+                },
+                {
+                  "name": "GIT_TOKEN",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "key": "token",
+                      "name": "git-creds"
+                    }
+                  }
+                },
+                {
+                  "name": "GIT_DOMAIN",
+                  "value": "github.albertsons.com"
+                },
+                {
+                  "name": "GIT_REPO",
+                  "value": "https://github.albertsons.com/albertsons/platform-devops-helmcharts.git"
+                },
+                {
+                  "name": "GIT_DIRECTORY",
+                  "value": "application"
+                },
+                {
+                  "name": "HELM_CHART_NAME",
+                  "value": "{{ var "chartName" }}"
+                },
+                {
+                  "name": "HELM_RELEASE",
+                  "value": "{{ var "appName" }}"
+                },
+                {
+                  "name": "HELM_NAMESPACE",
+                  "value": "{{ var "namespace" }}"
+                },
+                {
+                  "name": "HELM_CUSTOM_PARAMS",
+                  "value": "{{ var "helmChartParams" }}"
+                }
+              ],
+              "image": "justinrlee/helm3:custom",
+              "imagePullPolicy": "Always",
+              "name": "helm3-generator"
+            }
+          ],
+          "restartPolicy": "Never"
+        }
+      }
+    }
+  }
+}

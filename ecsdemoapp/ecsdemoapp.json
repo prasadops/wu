@@ -1,0 +1,17 @@
+{
+ "accounts": "canva-devecs",
+ "cloudProviders": "aws,ecs",
+ "dataSources": {
+  "disabled": [],
+  "enabled": [
+   "canaryConfigs"
+  ]
+ },
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "admin",
+ "name": "ecsdemoapp",
+ "trafficGuards": [],
+ "updateTs": "1635863144000",
+ "user": "admin"
+}

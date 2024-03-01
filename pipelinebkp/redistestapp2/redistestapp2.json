@@ -1,0 +1,11 @@
+{
+ "cloudProviders": "aws,kubernetes,ecs",
+ "createTs": "1643887451328",
+ "email": "hanumesh.kumar@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "name": "redistestapp2",
+ "trafficGuards": [],
+ "updateTs": "1643887451328",
+ "user": "hanumesh.kumar@opsmx.io"
+}

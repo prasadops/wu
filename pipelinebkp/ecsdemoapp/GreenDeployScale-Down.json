@@ -1,0 +1,52 @@
+{
+ "appConfig": {},
+ "application": "ecsdemoapp",
+ "id": "0ffdc166-c7c3-4db9-89a2-1f2c4a1fc139",
+ "index": 4,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "GreenDeployScale-Down",
+ "parameterConfig": [
+  {
+   "default": "0",
+   "description": "",
+   "hasOptions": false,
+   "label": "Scale Number",
+   "name": "number",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "ecsdemoapp-ecs-greendeploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "ecsdemoapp",
+    "cluster": "ecsdemoapp-ecs-greendeploy",
+    "detail": "greendeploy",
+    "stack": "ecs"
+   },
+   "name": "Disable Cluster",
+   "preferLargerOverNewer": "false",
+   "refId": "6",
+   "regions": [
+    "us-east-1"
+   ],
+   "remainingEnabledServerGroups": 0,
+   "requisiteStageRefIds": [],
+   "type": "disableCluster"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1648107313071"
+}

@@ -1,0 +1,90 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "30d91d38-a689-47f9-af36-8f79c8562c57",
+ "index": 2,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "awsec2deploy",
+ "parameterConfig": [],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "aws",
+   "cloudProviderType": "aws",
+   "name": "Find Image from Tags",
+   "packageName": "${parameters.amitag}",
+   "refId": "1",
+   "regions": [
+    "ap-south-1"
+   ],
+   "requisiteStageRefIds": [],
+   "tags": {},
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "awswurmdev",
+     "application": "ec2bakedeploy",
+     "availabilityZones": {
+      "ap-south-1": [
+       "ap-south-1a",
+       "ap-south-1b",
+       "ap-south-1c"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "aws",
+     "cooldown": 10,
+     "copySourceCustomBlockDeviceMappings": false,
+     "ebsOptimized": false,
+     "enabledMetrics": [],
+     "freeFormDetails": "woclb",
+     "healthCheckGracePeriod": 600,
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "instanceMonitoring": false,
+     "instanceType": "t2.large",
+     "keyPair": "windnginx",
+     "loadBalancers": [],
+     "moniker": {
+      "app": "ec2bakedeploy",
+      "detail": "woclb",
+      "stack": "awsdeploy"
+     },
+     "provider": "aws",
+     "securityGroups": [
+      "sg-0a0b233588d2ab8b2"
+     ],
+     "spotPrice": "",
+     "stack": "awsdeploy",
+     "strategy": "highlander",
+     "subnetType": "srini-web-alb",
+     "suspendedProcesses": [],
+     "tags": {
+      "Name": "DeployEC2 Window Without-ELB"
+     },
+     "targetGroups": [],
+     "targetHealthyDeployPercentage": 100,
+     "terminationPolicies": [
+      "Default"
+     ],
+     "useAmiBlockDeviceMappings": false
+    }
+   ],
+   "name": "Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1646639887997"
+}

@@ -1,0 +1,52 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "a2b4775a-705e-400a-9233-49220e7d7459",
+ "index": 2,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "Ubuntu-EC2-BakeDeploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "baseAmi": "ami-0df70cde1da5ba088",
+   "baseLabel": "release",
+   "baseName": "ops-ubuntu14-java-1",
+   "baseOs": "trusty",
+   "cloudProviderType": "aws",
+   "extendedAttributes": {
+    "apiversion": "v1",
+    "aws_subnet_id": "subnet-054c8cc98fedee309",
+    "aws_vpc_id": "vpc-0a4e420b86d55d5b6"
+   },
+   "name": "Bake",
+   "package": "restapp",
+   "rebake": true,
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "skipRegionDetection": true,
+   "storeType": "ebs",
+   "type": "bake",
+   "user": "anoop@opsmx.io",
+   "vmType": "hvm"
+  },
+  {
+   "continuePipeline": false,
+   "failPipeline": true,
+   "job": "Spin-Deb-AWS-Jav18-Build",
+   "master": "debjenkins",
+   "name": "Jenkins",
+   "parameters": {},
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "type": "jenkins"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1644220333333"
+}

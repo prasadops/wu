@@ -1,0 +1,86 @@
+{
+ "appConfig": {},
+ "application": "canvademoapp",
+ "id": "17f9e432-afe8-49b7-8fb5-60d9bb848506",
+ "index": 3,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "lbcreate",
+ "parameterConfig": [],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "default",
+   "alias": "runJob",
+   "application": "ecsdemoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "default",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "name": "createlb",
+     "namespace": "canva"
+    },
+    "spec": {
+     "backoffLimit": 2,
+     "template": {
+      "spec": {
+       "containers": [
+        {
+         "args": [
+          "aws elbv2 create-load-balancer --name arjun-test-lb --subnets --subnets subnet-054c8cc98fedee309 subnet-0d32b83ca05183c08 --security-groups sg-0f89b9be78a1cbf4c"
+         ],
+         "command": [
+          "/bin/sh",
+          "+x",
+          "-c"
+         ],
+         "image": "quay.io/opsmxpublic/awsgit:v2",
+         "name": "awscli",
+         "volumeMounts": [
+          {
+           "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+           "name": "default-token-92zzm",
+           "readOnly": true
+          },
+          {
+           "mountPath": "/root/.aws/",
+           "name": "awssecrets",
+           "readOnly": true
+          }
+         ]
+        }
+       ],
+       "restartPolicy": "Never",
+       "volumes": [
+        {
+         "name": "default-token-92zzm",
+         "secret": {
+          "defaultMode": 420,
+          "secretName": "default-token-92zzm"
+         }
+        },
+        {
+         "name": "awssecrets",
+         "secret": {
+          "defaultMode": 420,
+          "secretName": "awssecrets"
+         }
+        }
+       ]
+      }
+     }
+    }
+   },
+   "name": "Run Job (Manifest)",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "source": "text",
+   "type": "runJobManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1636377075000"
+}

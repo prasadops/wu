@@ -1,0 +1,15 @@
+{
+ "cloudProviders": "aws,kubernetes",
+ "createTs": "1679917812376",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "hanumesh.kumar@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "name": "approvalapp",
+ "trafficGuards": [],
+ "updateTs": "1682697399256",
+ "user": "hanumesh.kumar@opsmx.io"
+}

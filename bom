@@ -1,0 +1,25 @@
+## Bom file will override the halyard version in .hal/config
+## And over write the respective service images in service-settings, If service is not defined here it won't consider to over written
+
+version: 1.28.4
+services:
+  kayenta:
+    image: quay.io/opsmxpublic/ubi8-spin-kayenta:1.28.4_v2.32.3_4.0.3.1
+  fiat:
+    image: quay.io/opsmxpublic/ubi8-oes-fiat:2d5ab27-19
+  clouddriver: 
+    image: quay.io/opsmxpublic/ubi8-spin-clouddriver:1.28.4-fa4e12bba_4.0.3.1
+  front50:
+    image: quay.io/opsmxpublic/ubi8-oes-front50:6daaa063-28
+  echo:
+    image: quay.io/opsmxpublic/ubi8-spin-echo:1.28.4_2.34.4._4.0.3.1
+  rosco:
+    image: quay.io/opsmxpublic/ubi8-spin-rosco:1.28.4_v1.8.5_4.0.3.1
+  igor:
+    image: quay.io/opsmxpublic/ubi8-spin-igor:1.28.4_v4.7.3_4.0.3.1
+  deck:
+    image: quay.io/opsmxpublic/ubi8-oes-deck:1.28.4_v3.9.2_4.0.3.1
+  orca:
+    image: quay.io/opsmxpublic/ubi8-oes-orca:d293412a0-33
+  gate:
+    image: quay.io/opsmxpublic/ubi8-gate:1.28.4_6.55.3_v4.0.3.1

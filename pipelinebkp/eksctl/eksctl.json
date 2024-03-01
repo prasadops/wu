@@ -1,0 +1,4 @@
+{
+ "accounts": "aws-multiclouddemo-account,awswurmaccount,awswurmdev,jan10-account,jan11-aws-test,jan17-awsaccount,jan18-awsaccount,jan19-aws-account,jan21-aws-account,jan24-aws-account,jan7-aws-account",
+ "name": "eksctl"
+}

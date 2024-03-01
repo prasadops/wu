@@ -1,0 +1,11 @@
+{
+ "cloudProviders": "",
+ "createTs": "1632138547920",
+ "email": "hanumesh.c7@gmail.com",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "oestest",
+ "trafficGuards": [],
+ "updateTs": "1632138547920",
+ "user": "anoop@opsmx.io"
+}

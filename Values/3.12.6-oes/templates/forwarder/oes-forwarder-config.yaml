@@ -1,0 +1,20 @@
+{{- if and (or (eq .Values.installationMode "OES-AP")  (eq .Values.installationMode "EASY")) (.Values.forwarder.enabled) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opsmx-controller-controller1
+  labels:
+    agent.opsmx.com/name: controller1
+    agent.opsmx.com/role: controller
+{{ include "oes.standard-labels" . | indent 4 }}
+data:
+  configFile: |
+    serviceHostname: opsmx-controller-controller1
+    agentHostname: {{ .Values.forwarder.externalName }}
+    remoteCommandHostname: {{ .Values.forwarder.externalName }}
+    controlHostname: opsmx-controller-controller1
+    #agentAdvertisePort: "443"
+    serviceAuth:
+      currentKeyName: "public.pem"
+      headerMutationKeyName: "public.pem"
+{{- end -}}

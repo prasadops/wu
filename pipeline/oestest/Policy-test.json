@@ -1,0 +1,36 @@
+{
+ "application": "oestest",
+ "id": "0108756f-f413-4dd1-81bc-5be64ee21848",
+ "index": 4,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "Policy-test",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "Wait",
+   "refId": "1",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "wait",
+   "waitTime": 30
+  },
+  {
+   "name": "policyGate",
+   "parameters": {
+    "gate": "policyGate",
+    "imageids": "nginx:1.12",
+    "payload": " ",
+    "policypath": "/v1/data/opsmx1/blackoutwindow",
+    "policyurl": "http://oes-sapor:8085"
+   },
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "type": "policy"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1637052058201"
+}

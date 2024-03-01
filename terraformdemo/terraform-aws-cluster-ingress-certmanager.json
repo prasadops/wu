@@ -1,0 +1,99 @@
+{
+ "appConfig": {},
+ "application": "terraformdemo",
+ "description": "",
+ "id": "e76a8fb5-2fae-4beb-be5c-4d22fb8a4af7",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "terraform-aws-cluster-ingress-certmanager",
+ "parameterConfig": [],
+ "stages": [
+  {
+   "alias": "preconfiguredJob",
+   "name": "Terraform Plan",
+   "parameters": {
+    "artifactid": "appdemo01",
+    "location": "aws",
+    "overridefile": "",
+    "repo": "yugaa22/terraform-shell.git",
+    "scriptaccount": "anoop-tfartifact-account",
+    "stateaccount": "anoop-tfartifact-account",
+    "staterepo": "yugaa22/terraform-shell.git"
+   },
+   "refId": "16",
+   "requisiteStageRefIds": [],
+   "type": "Terraform Plan"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [],
+   "name": "Approve plan",
+   "notifications": [],
+   "refId": "17",
+   "requisiteStageRefIds": [
+    "16"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "alias": "preconfiguredJob",
+   "name": "Terraform Apply",
+   "parameters": {
+    "artifactid": "appdemo01",
+    "location": "aws",
+    "overridefile": "",
+    "repo": "yugaa22/terraform-shell.git",
+    "scriptaccount": "anoop-tfartifact-account",
+    "stateaccount": "anoop-tfartifact-account",
+    "staterepo": "yugaa22/terraform-shell.git"
+   },
+   "refId": "18",
+   "requisiteStageRefIds": [
+    "17"
+   ],
+   "type": "Terraform Apply"
+  },
+  {
+   "name": "Deploy Application",
+   "refId": "20",
+   "requisiteStageRefIds": [
+    "18"
+   ],
+   "type": "wait",
+   "waitTime": 10
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [],
+   "name": "Destroy?",
+   "notifications": [],
+   "refId": "22",
+   "requisiteStageRefIds": [
+    "20"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "alias": "preconfiguredJob",
+   "name": "Terraform Destroy",
+   "parameters": {
+    "artifactid": "appdemo01",
+    "location": "aws",
+    "overridefile": "",
+    "repo": "yugaa22/terraform-shell.git",
+    "scriptaccount": "anoop-tfartifact-account",
+    "stateaccount": "anoop-tfartifact-account",
+    "staterepo": "yugaa22/terraform-shell.git"
+   },
+   "refId": "23",
+   "requisiteStageRefIds": [
+    "22"
+   ],
+   "type": "Terraform Destroy"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1638884120514"
+}

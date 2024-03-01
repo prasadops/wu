@@ -1,0 +1,33 @@
+sql:
+  enabled: true
+  taskRepository:
+    enabled: true
+  cache:
+    enabled: true
+    readBatchSize: 500
+    writeBatchSize: 300
+  scheduler:
+    enabled: true
+  connectionPools:
+    default:
+      default: true
+      jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+      user: clouddriver_service
+      password: OpsMx2021
+    tasks:
+      user: clouddriver_service
+      password: OpsMx2021
+      jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+  migration:
+    user: clouddriver_migrate
+    password: OpsMx2021
+    jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+
+redis:
+  enabled: false
+  cache:
+    enabled: false
+  scheduler:
+    enabled: false
+  taskRepository:
+    enabled: false

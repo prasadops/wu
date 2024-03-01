@@ -1,0 +1,11 @@
+{
+ "cloudProviders": "aws,ecs",
+ "createTs": "1640000364042",
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "ec2bakedeploy",
+ "trafficGuards": [],
+ "updateTs": "1640000364042",
+ "user": "anoop@opsmx.io"
+}

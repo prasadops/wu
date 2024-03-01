@@ -1,0 +1,156 @@
+{
+ "application": "ninjatrainingapp",
+ "id": "df72f20a-d59a-4353-a23b-c9f29122a621",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "trainingpipeline",
+ "schema": "1",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "continuePipeline": false,
+   "failPipeline": true,
+   "job": "Spin-Git-Restapp",
+   "master": "spin-jenkins",
+   "name": "Jenkins",
+   "parameters": {},
+   "propertyFile": "file.properties",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "jenkins"
+  },
+  {
+   "failOnFailedExpressions": true,
+   "name": "Evaluate Variables",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "evaluateVariables",
+   "variables": [
+    {
+     "key": "ImageVersionNumber",
+     "value": "${#stage(\"Jenkins\")[\"outputs\"][\"Buildnumber\"]}"
+    }
+   ]
+  },
+  {
+   "account": "default",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "annotations": {
+       "strategy.spinnaker.io/max-version-history": "2"
+      },
+      "name": "opsmx-restapp"
+     },
+     "spec": {
+      "replicas": 1,
+      "revisionHistoryLimit": 2,
+      "selector": {
+       "matchLabels": {
+        "app": "opsmx-restapp"
+       }
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "app": "opsmx-restapp",
+         "version": "${#stage(\"Jenkins\")[\"outputs\"][\"Buildnumber\"]}"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "image": "docker.io/opsmx11/restapp:${#stage(\"Jenkins\")[\"outputs\"][\"Buildnumber\"]}",
+          "imagePullPolicy": "Always",
+          "name": "restapp",
+          "ports": [
+           {
+            "containerPort": 8080,
+            "name": "http",
+            "protocol": "TCP"
+           },
+           {
+            "containerPort": 9090,
+            "name": "prometheus",
+            "protocol": "TCP"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "apiVersion": "v1",
+     "kind": "Service",
+     "metadata": {
+      "name": "opsmx-restapp-service"
+     },
+     "spec": {
+      "ports": [
+       {
+        "name": "canary",
+        "port": 8080,
+        "protocol": "TCP",
+        "targetPort": 8080
+       },
+       {
+        "name": "reports",
+        "port": 9090,
+        "protocol": "TCP",
+        "targetPort": 9090
+       }
+      ],
+      "selector": {
+       "app": "opsmx-restapp"
+      },
+      "type": "LoadBalancer"
+     }
+    }
+   ],
+   "moniker": {
+    "app": "ninjatrainingapp"
+   },
+   "name": "Deploy (Manifest)",
+   "namespaceOverride": "spinterra",
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "application": "demoapp",
+   "failPipeline": true,
+   "name": "Pipeline",
+   "pipeline": "185c1a5b-6f5e-4d49-9313-79fd608769ba",
+   "pipelineParameters": {
+    "version": "${#stage(\"Jenkins\")[\"outputs\"][\"Buildnumber\"]}"
+   },
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "type": "pipeline",
+   "waitForCompletion": true
+  }
+ ],
+ "triggers": []
+}

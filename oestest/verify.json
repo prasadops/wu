@@ -1,0 +1,102 @@
+{
+ "application": "oestest",
+ "id": "bda3b354-49df-461d-9afa-5adc4e24f5fd",
+ "index": 3,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "verify",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "Wait",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "wait",
+   "waitTime": 3
+  },
+  {
+   "name": "verifygate",
+   "parameters": {
+    "baselinestarttime": 1612595040000,
+    "canaryresultscore": "90",
+    "canarystarttime": 1612554720000,
+    "gate": "verifygate",
+    "gateurl": "https://oesgate.wurm.opsmx.net/autopilot/api/v3/registerCanary",
+    "imageids": "niginx:1.14.2",
+    "lifetime": "0.5",
+    "log": "true",
+    "metric": "true",
+    "minicanaryresult": "70"
+   },
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "verification"
+  },
+  {
+   "account": "default",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "app": "nginx"
+      },
+      "name": "nginx-deployment"
+     },
+     "spec": {
+      "replicas": 1,
+      "selector": {
+       "matchLabels": {
+        "app": "nginx"
+       }
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "app": "nginx"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "image": "nginx:1.14.2",
+          "name": "nginx",
+          "ports": [
+           "contain"
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   ],
+   "moniker": {
+    "app": "oestest"
+   },
+   "name": "Deploy (Manifest)",
+   "namespaceOverride": "default",
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1634214129024"
+}

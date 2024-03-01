@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
+    cert-manager.io/issuer: letsencrypt-srini-albertsons-spin
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  name: dinghy-ingress
+spec:
+  rules:
+  - host: dinghy.efk.opsmx.com
+    http:
+      paths:
+      - backend:
+          serviceName: dinghy
+          servicePort: 8081
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - dinghy.efk.opsmx.com
+    secretName: dinghy-authtls

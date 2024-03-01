@@ -1,0 +1,72 @@
+{
+ "appConfig": {},
+ "application": "ecsdemoapp",
+ "id": "812dd020-a923-4bd5-8ab7-9d09f3291963",
+ "index": 3,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "GreenDeployScale-Up",
+ "parameterConfig": [
+  {
+   "default": "2",
+   "description": "",
+   "hasOptions": false,
+   "label": "Scale Number",
+   "name": "number",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "action": "scale_up",
+   "capacity": {},
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "ecsdemoapp-ecs-greendeploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "ecsdemoapp",
+    "cluster": "ecsdemoapp-ecs-greendeploy",
+    "detail": "greendeploy",
+    "stack": "ecs"
+   },
+   "name": "Resize Server Group",
+   "refId": "5",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [],
+   "resizeType": "incr",
+   "scaleNum": "${parameters.number}",
+   "target": "current_asg_dynamic",
+   "targetHealthyDeployPercentage": 100,
+   "type": "resizeServerGroup"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Pipeline",
+   "pipeline": "6205381c-d306-4d9f-a270-b0208aa434af",
+   "pipelineParameters": {
+    "blueweight": "0",
+    "greenweight": "1"
+   },
+   "refId": "6",
+   "requisiteStageRefIds": [
+    "5"
+   ],
+   "type": "pipeline",
+   "waitForCompletion": true
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1635891047000"
+}

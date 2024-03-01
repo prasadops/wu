@@ -1,0 +1,712 @@
+{
+ "application": "canvademoapp",
+ "id": "4b0a3aea-004e-44e8-a3ac-bb48eac0fcfa",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "k8sdeploy",
+ "parameterConfig": [
+  {
+   "default": "quay.io/opsmxpublic/aws-helm:4",
+   "description": "",
+   "hasOptions": false,
+   "label": "",
+   "name": "image",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "baseapp",
+   "description": "",
+   "hasOptions": false,
+   "label": "",
+   "name": "baseservicename",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  },
+  {
+   "default": "canaryapp",
+   "description": "",
+   "hasOptions": false,
+   "label": "",
+   "name": "canaryservicename",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": false
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "k8sdev",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "v1",
+     "kind": "Service",
+     "metadata": {
+      "labels": {
+       "name": "baseapp"
+      },
+      "name": "baseapp"
+     },
+     "spec": {
+      "ports": [
+       {
+        "name": "baseapp",
+        "port": 8080,
+        "protocol": "TCP",
+        "targetPort": 8080
+       }
+      ],
+      "selector": {
+       "name": "baseapp"
+      },
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+     },
+     "status": {
+      "loadBalancer": {}
+     }
+    },
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "name": "baseapp"
+      },
+      "name": "baseapp"
+     },
+     "spec": {
+      "progressDeadlineSeconds": 600,
+      "replicas": 1,
+      "revisionHistoryLimit": 10,
+      "selector": {
+       "matchLabels": {
+        "name": "baseapp"
+       }
+      },
+      "strategy": {
+       "rollingUpdate": {
+        "maxSurge": "25%",
+        "maxUnavailable": "25%"
+       },
+       "type": "RollingUpdate"
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "name": "baseapp"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "env": [
+           {
+            "name": "DD_AGENT_HOST",
+            "valueFrom": {
+             "fieldRef": {
+              "apiVersion": "v1",
+              "fieldPath": "spec.nodeName"
+             }
+            }
+           },
+           {
+            "name": "SERVICE_NAME",
+            "value": "ecsbaseapp"
+           }
+          ],
+          "image": "opsmxdev/issuegen:dv1.0.0",
+          "imagePullPolicy": "IfNotPresent",
+          "name": "baseapp-rest-1",
+          "ports": [
+           {
+            "containerPort": 8080,
+            "protocol": "TCP"
+           }
+          ],
+          "resources": {},
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File"
+         }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "terminationGracePeriodSeconds": 30
+       }
+      }
+     }
+    }
+   ],
+   "moniker": {
+    "app": "canvademoapp"
+   },
+   "name": "Basedeploy",
+   "namespaceOverride": "spinnaker",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "account": "k8sdev",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "v1",
+     "kind": "Service",
+     "metadata": {
+      "labels": {
+       "name": "canaryapp"
+      },
+      "name": "canaryapp"
+     },
+     "spec": {
+      "ports": [
+       {
+        "name": "canaryapp",
+        "port": 8080,
+        "protocol": "TCP",
+        "targetPort": 8080
+       }
+      ],
+      "selector": {
+       "name": "canaryapp"
+      },
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+     },
+     "status": {
+      "loadBalancer": {}
+     }
+    },
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "name": "canaryapp"
+      },
+      "name": "canaryapp"
+     },
+     "spec": {
+      "progressDeadlineSeconds": 600,
+      "replicas": 1,
+      "revisionHistoryLimit": 10,
+      "selector": {
+       "matchLabels": {
+        "name": "canaryapp"
+       }
+      },
+      "strategy": {
+       "rollingUpdate": {
+        "maxSurge": "25%",
+        "maxUnavailable": "25%"
+       },
+       "type": "RollingUpdate"
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "name": "canaryapp"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "env": [
+           {
+            "name": "DD_AGENT_HOST",
+            "valueFrom": {
+             "fieldRef": {
+              "apiVersion": "v1",
+              "fieldPath": "spec.nodeName"
+             }
+            }
+           },
+           {
+            "name": "SERVICE_NAME",
+            "value": "ecscanaryapp"
+           }
+          ],
+          "image": "opsmxdev/issuegen:dv1.0.1",
+          "imagePullPolicy": "IfNotPresent",
+          "name": "canaryapp-rest-1",
+          "ports": [
+           {
+            "containerPort": 8080,
+            "protocol": "TCP"
+           }
+          ],
+          "resources": {},
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File"
+         }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "terminationGracePeriodSeconds": 30
+       }
+      }
+     }
+    }
+   ],
+   "moniker": {
+    "app": "canvademoapp"
+   },
+   "name": "Canarydeploy",
+   "namespaceOverride": "spinnaker",
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "account": "k8sdev",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "v1",
+     "data": {
+      "run.sh": "#!/bin/bash\nset -x\n\n#runcount=3000\n\n$i=0\n\n#while [ $i -lt $runcount ]\nruntime=$((5 * 60))\n#endtime=$(date -u --date 'now + 5 minutes' +%s);\nendtime=$(($(date -u +%s) + runtime))\nwhile [[ $(date -u +%s) -le $endtime ]]\n\ndo\n\n  curl -XGET http://${SERVICENAME}:8080/logs?type=INFO\n  \n  curl -XGET http://${SERVICENAME}:8080/logs?type=DEBUG\n  \n  curl -XGET http://${SERVICENAME}:8080/catcount\n  \n  curl -XGET http://${SERVICENAME}:8080/dogcount\n  \n  sleep 0.$[ ( $RANDOM % 5 ) + 1 ]s\n\n  #((i++))\n\n  #echo $i\n\ndone\n"
+     },
+     "kind": "ConfigMap",
+     "metadata": {
+      "annotations": {
+       "artifact.spinnaker.io/version": "false"
+      },
+      "name": "initscript"
+     }
+    }
+   ],
+   "moniker": {
+    "app": "canvademoapp"
+   },
+   "name": "CreateLoadScript",
+   "namespaceOverride": "spinnaker",
+   "refId": "3",
+   "requisiteStageRefIds": [],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "failOnFailedExpressions": true,
+   "name": "Evaluate Start time",
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "9"
+   ],
+   "type": "evaluateVariables",
+   "variables": [
+    {
+     "key": "StartTime",
+     "value": "${new java.util.Date()}"
+    }
+   ]
+  },
+  {
+   "account": "k8sdev",
+   "alias": "runJob",
+   "application": "canvademoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "k8sdev",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "annotations": {
+      "artifact.spinnaker.io/version": "false"
+     },
+     "generateName": "baseload-",
+     "labels": {
+      "app": "maven"
+     },
+     "namespace": "spinnaker"
+    },
+    "spec": {
+     "backoffLimit": 0,
+     "template": {
+      "spec": {
+       "containers": [
+        {
+         "command": [
+          "bash",
+          "/tmp/initscript/run.sh"
+         ],
+         "env": [
+          {
+           "name": "SERVICENAME",
+           "value": "${parameters.baseservicename}"
+          }
+         ],
+         "image": "${parameters.image}",
+         "name": "loadstage",
+         "volumeMounts": [
+          {
+           "mountPath": "/tmp/initscript/",
+           "name": "initscript"
+          }
+         ]
+        }
+       ],
+       "restartPolicy": "Never",
+       "volumes": [
+        {
+         "configMap": {
+          "defaultMode": 420,
+          "name": "initscript"
+         },
+         "name": "initscript"
+        }
+       ]
+      }
+     }
+    }
+   },
+   "name": "LoadBase",
+   "refId": "5",
+   "requisiteStageRefIds": [
+    "4"
+   ],
+   "source": "text",
+   "type": "runJobManifest"
+  },
+  {
+   "account": "k8sdev",
+   "alias": "runJob",
+   "application": "canvademoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "k8sdev",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "annotations": {
+      "artifact.spinnaker.io/version": "false"
+     },
+     "generateName": "canaryload-",
+     "labels": {
+      "app": "maven"
+     },
+     "namespace": "spinnaker"
+    },
+    "spec": {
+     "backoffLimit": 0,
+     "template": {
+      "spec": {
+       "containers": [
+        {
+         "command": [
+          "bash",
+          "/tmp/initscript/run.sh"
+         ],
+         "env": [
+          {
+           "name": "SERVICENAME",
+           "value": "${parameters.canaryservicename}"
+          }
+         ],
+         "image": "${parameters.image}",
+         "name": "loadstage",
+         "volumeMounts": [
+          {
+           "mountPath": "/tmp/initscript/",
+           "name": "initscript"
+          }
+         ]
+        }
+       ],
+       "restartPolicy": "Never",
+       "volumes": [
+        {
+         "configMap": {
+          "defaultMode": 420,
+          "name": "initscript"
+         },
+         "name": "initscript"
+        }
+       ]
+      }
+     }
+    }
+   },
+   "name": "LoadCanary",
+   "refId": "6",
+   "requisiteStageRefIds": [
+    "4"
+   ],
+   "source": "text",
+   "type": "runJobManifest"
+  },
+  {
+   "completeOtherBranchesThenFail": false,
+   "continuePipeline": true,
+   "failPipeline": false,
+   "name": "VerificationGate",
+   "parameters": {
+    "baselinestarttime": "${StartTime}",
+    "canaryresultscore": "90",
+    "canarystarttime": "${StartTime}",
+    "gate": "VerificationGate",
+    "gateurl": "https://oesgate.canva.opsmx.net/autopilot/api/v3/registerCanary",
+    "imageids": "issuegen",
+    "lifetime": "0.1",
+    "log": "false",
+    "metric": "true",
+    "minicanaryresult": "70"
+   },
+   "refId": "7",
+   "requisiteStageRefIds": [
+    "5",
+    "6"
+   ],
+   "type": "verification"
+  },
+  {
+   "account": "k8sdev",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "v1",
+     "kind": "Service",
+     "metadata": {
+      "labels": {
+       "name": "canaryapp"
+      },
+      "name": "canaryapp"
+     },
+     "spec": {
+      "ports": [
+       {
+        "name": "canaryapp",
+        "port": 8080,
+        "protocol": "TCP",
+        "targetPort": 8080
+       }
+      ],
+      "selector": {
+       "name": "canaryapp"
+      },
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+     },
+     "status": {
+      "loadBalancer": {}
+     }
+    },
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "name": "canaryapp"
+      },
+      "name": "canaryapp"
+     },
+     "spec": {
+      "progressDeadlineSeconds": 600,
+      "replicas": 1,
+      "revisionHistoryLimit": 10,
+      "selector": {
+       "matchLabels": {
+        "name": "canaryapp"
+       }
+      },
+      "strategy": {
+       "rollingUpdate": {
+        "maxSurge": "25%",
+        "maxUnavailable": "25%"
+       },
+       "type": "RollingUpdate"
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "name": "canaryapp"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "env": [
+           {
+            "name": "DD_AGENT_HOST",
+            "valueFrom": {
+             "fieldRef": {
+              "apiVersion": "v1",
+              "fieldPath": "status.hostIP"
+             }
+            }
+           },
+           {
+            "name": "SERVICE_NAME",
+            "value": "ecscanaryapp"
+           }
+          ],
+          "image": "opsmxdev/issuegen:dv1.0.1",
+          "imagePullPolicy": "IfNotPresent",
+          "name": "canaryapp-rest-1",
+          "ports": [
+           {
+            "containerPort": 8080,
+            "protocol": "TCP"
+           }
+          ],
+          "resources": {},
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File"
+         }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "terminationGracePeriodSeconds": 30
+       }
+      }
+     }
+    }
+   ],
+   "moniker": {
+    "app": "canvademoapp"
+   },
+   "name": "Deploy",
+   "namespaceOverride": "spinnaker",
+   "refId": "8",
+   "requisiteStageRefIds": [
+    "11"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#stage(\"VerificationGate\")[\"outputs\"][\"overallScore\"]} \u003e 80 OR #judgement('Manual Judgment') == 'Deploy'",
+    "type": "expression"
+   },
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "name": "Wait",
+   "refId": "9",
+   "requisiteStageRefIds": [
+    "1",
+    "2",
+    "3"
+   ],
+   "type": "wait",
+   "waitTime": 10
+  },
+  {
+   "name": "Check Preconditions",
+   "preconditions": [
+    {
+     "context": {
+      "expression": "${#stage(\"VerificationGate\")[\"outputs\"][\"overallScore\"]} \u003e 60",
+      "failureMessage": "Score is Lessthan 60, so failing the pipeline"
+     },
+     "failPipeline": true,
+     "type": "expression"
+    }
+   ],
+   "refId": "10",
+   "requisiteStageRefIds": [
+    "7"
+   ],
+   "type": "checkPreconditions"
+  },
+  {
+   "failPipeline": true,
+   "instructions": "",
+   "judgmentInputs": [
+    {
+     "value": "Deploy"
+    },
+    {
+     "value": "Rollback"
+    }
+   ],
+   "name": "Manual Judgment",
+   "notifications": [],
+   "refId": "11",
+   "requisiteStageRefIds": [
+    "10"
+   ],
+   "stageEnabled": {
+    "expression": "${#stage(\"VerificationGate\")[\"outputs\"][\"overallScore\"]} \u003e= 60 AND ${#stage(\"VerificationGate\")[\"outputs\"][\"overallScore\"]} \u003c= 80",
+    "type": "expression"
+   },
+   "type": "manualJudgment"
+  },
+  {
+   "account": "k8sdev",
+   "cloudProvider": "kubernetes",
+   "location": "spinnaker",
+   "manifestName": "deployment baseapp",
+   "mode": "static",
+   "name": "Rollback",
+   "numRevisionsBack": 1,
+   "refId": "12",
+   "requisiteStageRefIds": [
+    "11"
+   ],
+   "stageEnabled": {
+    "expression": "#judgement('Manual Judgment') == 'Rollback'",
+    "type": "expression"
+   },
+   "type": "undoRolloutManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1635929252000"
+}

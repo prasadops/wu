@@ -1,0 +1,4 @@
+redis.poll.intervalSeconds: 75
+redis.poll.timeoutSeconds: 600
+
+server.max-http-header-size: 100000

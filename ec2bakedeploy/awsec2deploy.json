@@ -1,0 +1,108 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "30d91d38-a689-47f9-af36-8f79c8562c57",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "awsec2deploy",
+ "parameterConfig": [
+  {
+   "default": "ami-03a2cd0a6eaca4145",
+   "description": "",
+   "hasOptions": false,
+   "label": "",
+   "name": "amitag",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "aws",
+   "cloudProviderType": "aws",
+   "name": "Find Image from Tags",
+   "packageName": "${parameters.amitag}",
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [],
+   "tags": {},
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "awswurmdev",
+     "application": "ec2bakedeploy",
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "aws",
+     "cooldown": 10,
+     "copySourceCustomBlockDeviceMappings": false,
+     "ebsOptimized": false,
+     "enabledMetrics": [],
+     "freeFormDetails": "woclb",
+     "healthCheckGracePeriod": 600,
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "instanceMonitoring": false,
+     "instanceType": "t2.micro",
+     "keyPair": "EC2Keys",
+     "loadBalancers": [],
+     "moniker": {
+      "app": "ec2bakedeploy",
+      "detail": "woclb",
+      "stack": "awsdeploy"
+     },
+     "provider": "aws",
+     "securityGroups": [
+      "sg-0f89b9be78a1cbf4c"
+     ],
+     "spotPrice": "",
+     "stack": "awsdeploy",
+     "strategy": "highlander",
+     "subnetType": "external (spinEC2vpc)",
+     "suspendedProcesses": [],
+     "tags": {
+      "Name": "DeployEC2Without-ELB"
+     },
+     "targetGroups": [],
+     "targetHealthyDeployPercentage": 100,
+     "terminationPolicies": [
+      "Default"
+     ],
+     "useAmiBlockDeviceMappings": false
+    }
+   ],
+   "name": "Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1644220454753"
+}

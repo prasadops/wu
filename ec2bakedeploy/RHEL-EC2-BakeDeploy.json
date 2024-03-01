@@ -1,0 +1,37 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "a5cf2a32-a19d-456c-a725-5a42f6396c04",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "RHEL-EC2-BakeDeploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "baseLabel": "release",
+   "baseOs": "RHEL",
+   "cloudProviderType": "aws",
+   "extendedAttributes": {
+    "apiversion": "v1",
+    "aws_subnet_id": "subnet-054c8cc98fedee309",
+    "aws_vpc_id": "vpc-0a4e420b86d55d5b6",
+    "repository": "http://ops-rpm-bucket.s3-website-us-east-1.amazonaws.com"
+   },
+   "name": "Bake",
+   "package": "nginx-module-perl-1.18.0-2.el8.ngx.src.rpm",
+   "rebake": true,
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [],
+   "storeType": "ebs",
+   "type": "bake",
+   "user": "anoop@opsmx.io",
+   "vmType": "hvm"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1644220333342"
+}

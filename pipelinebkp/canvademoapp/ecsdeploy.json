@@ -1,0 +1,131 @@
+{
+ "application": "canvademoapp",
+ "id": "759a25f7-4511-448e-9b7a-81a0cee5d79b",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "ecsdeploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "imageLabelOrSha": "nginx",
+   "name": "Find Image from Tags",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "canva-devecs",
+     "application": "canvademoapp",
+     "associatePublicIpAddress": true,
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "ecs",
+     "computeUnits": 512,
+     "copySourceScalingPoliciesAndActions": true,
+     "delayBeforeDisableSec": 0,
+     "delayBeforeScaleDownSec": 0,
+     "dockerImageCredentialsSecret": "None (No registry credentials)",
+     "dockerLabels": {},
+     "ecsClusterName": "opsmx-ecs-fargate",
+     "environmentVariables": {},
+     "freeFormDetails": "sampledeploy",
+     "healthCheckGracePeriodSeconds": "",
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "imageDescription": {
+      "account": "jfrog-docker",
+      "fromTrigger": true,
+      "imageId": "opsmx.jfrog.io/default-docker-local/simple-webapp (Tag resolved at runtime)",
+      "registry": "opsmx.jfrog.io",
+      "repository": "default-docker-local/simple-webapp"
+     },
+     "launchType": "FARGATE",
+     "loadBalancers": [],
+     "maxRemainingAsgs": 2,
+     "moniker": {
+      "app": "canvademoapp",
+      "detail": "sampledeploy",
+      "stack": "canva"
+     },
+     "networkMode": "awsvpc",
+     "pipelineId": "",
+     "placementConstraints": [],
+     "placementStrategyName": "None",
+     "placementStrategySequence": [],
+     "preferSourceCapacity": true,
+     "provider": "ecs",
+     "reservedMemory": 1024,
+     "rollback": {
+      "onFailure": true
+     },
+     "scaleDown": false,
+     "securityGroupNames": [
+      "spinEC2-New"
+     ],
+     "securityGroups": [
+      "spinEC2-New"
+     ],
+     "serviceDiscoveryAssociations": [],
+     "stack": "canva",
+     "strategy": "redblack",
+     "subnetType": "",
+     "subnetTypes": [
+      "external (spinEC2vpc)"
+     ],
+     "tags": {
+      "Department": "Ninja",
+      "Owner": "Anoop",
+      "Use": "Client"
+     },
+     "targetGroup": "",
+     "targetGroupMappings": [
+      {
+       "containerName": "",
+       "containerPort": 8080,
+       "targetGroup": "ecsdemoapp-BlueTgp"
+      }
+     ],
+     "taskDefinitionArtifact": {},
+     "useSourceCapacity": true,
+     "useTaskDefinitionArtifact": false
+    }
+   ],
+   "name": "Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  }
+ ],
+ "triggers": [
+  {
+   "account": "jfrog-docker",
+   "enabled": true,
+   "organization": "default-docker-local",
+   "registry": "opsmx.jfrog.io",
+   "repository": "default-docker-local/simple-webapp",
+   "type": "docker"
+  }
+ ],
+ "updateTs": "1636377379000"
+}

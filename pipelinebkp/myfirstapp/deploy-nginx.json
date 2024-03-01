@@ -1,0 +1,75 @@
+{
+ "application": "myfirstapp",
+ "id": "49417820-f946-4a6e-bd26-efc5b4e737a9",
+ "index": 7,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "deploy-nginx",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "default",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "app": "opsmx-demo-dev"
+      },
+      "name": "opsmx-dev-deployment"
+     },
+     "spec": {
+      "replicas": 1,
+      "selector": {
+       "matchLabels": {
+        "app": "opsmx-demo-dev"
+       }
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "app": "opsmx-demo-dev"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "image": "nginx:1.14.2",
+          "name": "opsmx-demo-dev",
+          "ports": [
+           {
+            "containerPort": 80
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   ],
+   "moniker": {
+    "app": "myfirstapp"
+   },
+   "name": "Deploy (Manifest)",
+   "namespaceOverride": "default",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1646650533416"
+}

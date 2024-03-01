@@ -1,0 +1,32 @@
+{
+ "accounts": "bluegreenk8s,myaccount",
+ "cloudProviders": "kubernetes",
+ "createTs": "1633608747144",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "myfirstapp",
+ "permissions": {
+  "EXECUTE": [
+   "admin",
+   "qa",
+   "devops"
+  ],
+  "READ": [
+   "admin",
+   "qa",
+   "devops"
+  ],
+  "WRITE": [
+   "admin",
+   "devops"
+  ]
+ },
+ "trafficGuards": [],
+ "updateTs": "1637150700396",
+ "user": "anoop@opsmx.io"
+}

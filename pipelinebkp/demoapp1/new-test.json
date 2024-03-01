@@ -1,0 +1,147 @@
+{
+ "application": "demoapp1",
+ "id": "97cd9d89-43bc-4698-aa59-bc517ab981cb",
+ "index": 2,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "new-test",
+ "parameterConfig": [
+  {
+   "default": "",
+   "description": "",
+   "hasOptions": false,
+   "label": "min_max_desired",
+   "name": "min_max_desired",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "customHeaders": {
+    "Authorization": "Basic YWRtaW46b3BzbXhhZG1pbjEyMw==",
+    "Content-Type": "application/json"
+   },
+   "method": "POST",
+   "name": "POSTResize",
+   "payload": {
+    "application": "${appname}",
+    "description": "${descrption}",
+    "job": [
+     {
+      "asgName": "${servergroup_asg}",
+      "capacity": {
+       "desired": "${min_max_desire}",
+       "max": "${min_max_desire}",
+       "min": "${min_max_desire}"
+      },
+      "cloudProvider": "${type}",
+      "credentials": "${account_credentials}",
+      "moniker": "${moniker}",
+      "region": "${region}",
+      "serverGroupName": "${servergroup_asg}",
+      "type": "resizeServerGroup",
+      "user": "${user}"
+     }
+    ]
+   },
+   "refId": "1",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "statusUrlResolution": "getMethod",
+   "type": "webhook",
+   "url": "http://oes-gate:8084/tasks"
+  },
+  {
+   "customHeaders": {
+    "Content-Type": "application/json"
+   },
+   "method": "GET",
+   "name": "get",
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "statusUrlResolution": "getMethod",
+   "type": "webhook",
+   "url": "http://spin-clouddriver-ro:7002/applications/demoapp1/serverGroups"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "yes"
+    },
+    {
+     "value": "no"
+    }
+   ],
+   "name": "Manual Judgment",
+   "notifications": [],
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "4"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "failOnFailedExpressions": true,
+   "name": "Evaluate Variables",
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "evaluateVariables",
+   "variables": [
+    {
+     "key": "account_credentials",
+     "value": "${#stage('get')['context']['webhook']['body']['0']['account']}"
+    },
+    {
+     "key": "servergroup_asg",
+     "value": "${#stage('get')['context']['webhook']['body']['0']['name']}"
+    },
+    {
+     "key": "type",
+     "value": "${#stage('get')['context']['webhook']['body']['0']['type']}"
+    },
+    {
+     "key": "moniker",
+     "value": "${#stage('get')['context']['webhook']['body']['0']['moniker']}"
+    },
+    {
+     "key": "region",
+     "value": "${#stage('get')['context']['webhook']['body']['0']['region']}"
+    },
+    {
+     "key": "min_max_desire",
+     "value": "${parameters.min_max_desired}"
+    },
+    {
+     "key": "descrption",
+     "value": "Resize Server Group: '${servergroup_asg}' from (desired: '${existing_min_max_desire}', max: '${existing_min_max_desire}', min: '${existing_min_max_desire}', pinned: true) to (min: '${min_max_desire}', max: '${min_max_desire}', desired: '${min_max_desire}')"
+    },
+    {
+     "key": "existing_min_max_desire",
+     "value": "${#stage('get')['context']['webhook']['body']['0']['capacity']['min']}"
+    },
+    {
+     "key": "appname",
+     "value": "${execution.application}"
+    },
+    {
+     "key": "user",
+     "value": "${execution.authentication.user}"
+    }
+   ]
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1635845477000"
+}

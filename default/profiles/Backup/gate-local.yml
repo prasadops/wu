@@ -1,0 +1,42 @@
+spinnaker:
+  extensibility:
+    plugins-root-path: /opt/spinnaker/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-gate
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: true
+    deck-proxy:
+      enabled: true
+      plugins:
+        Opsmx.VerificationGatePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.TestVerificationGatePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.PolicyGatePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.CustomStagePlugin:
+          enabled: true
+          version: 1.0.1
+        Opsmx.VisibilityApprovalPlugin:
+          enabled: true
+          version: 1.0.1
+        Aws.LambdaDeploymentPlugin:
+          enabled: true
+          version: 1.0.6          
+    repositories:
+      opsmx-repo:
+        url: file:///opt/spinnaker/plugins/plugins.json
+      awsLambdaDeploymentPluginRepo:
+        url: https://raw.githubusercontent.com/spinnaker-plugins/aws-lambda-deployment-plugin-spinnaker/1.0.6/plugins.json 
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json

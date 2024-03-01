@@ -1,0 +1,57 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "3ea03b74-998b-426e-92ff-f019cb066879",
+ "index": 5,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "destroyaws-deploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "aws",
+   "cloudProviderType": "aws",
+   "cluster": "ec2bakedeploy-awsdeploy-woclb",
+   "credentials": "awswurmdev",
+   "moniker": {
+    "app": "ec2bakedeploy",
+    "cluster": "ec2bakedeploy-awsdeploy-woclb",
+    "detail": "woclb",
+    "stack": "awsdeploy"
+   },
+   "name": "Disable Cluster",
+   "preferLargerOverNewer": "false",
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "remainingEnabledServerGroups": 1,
+   "requisiteStageRefIds": [],
+   "type": "disableCluster"
+  },
+  {
+   "cloudProvider": "aws",
+   "cloudProviderType": "aws",
+   "cluster": "ec2bakedeploy-awsdeploy-woclb",
+   "credentials": "awswurmdev",
+   "moniker": {
+    "app": "ec2bakedeploy",
+    "cluster": "ec2bakedeploy-awsdeploy-woclb",
+    "detail": "woclb",
+    "stack": "awsdeploy"
+   },
+   "name": "Destroy Server Group",
+   "refId": "2",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "target": "current_asg_dynamic",
+   "type": "destroyServerGroup"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1644221134126"
+}

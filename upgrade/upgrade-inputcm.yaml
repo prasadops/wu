@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  url: github.com/OpsMx/WU-RM-Repo ## e.g github.com/ksrinimba/gitops-repo, url without the leading "https://", the "git-repo" in the documentation
+  username: hanumeshc
+  gitemail: hanumesh.kumar@opsmx.io
+
+  #####################################################################################################
+  # Typically, there is no need to change the values below this line, please check the "nameaspace"
+  #####################################################################################################
+  branch: master         # Gitrepo branch, MUST be the default branch
+  version: 4.0.21     # Helm Chart Version
+  namespace: oes # Namespace to install ISD, best not to change
+  beta: "true"          # Set to true only for beta releases, default is false
+  secrets: gittoken,ldappassword,dbpassword,keystorepassword,rabbitmqpassword,saporpassword,redispassword,miniopassword,ldapconfigpassword
+kind: ConfigMap
+metadata:
+  name: upgrade-inputcm

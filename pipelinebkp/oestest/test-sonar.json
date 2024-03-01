@@ -1,0 +1,54 @@
+{
+ "application": "oestest",
+ "id": "f8f55b77-d32e-4ff4-a969-6e57adcb212f",
+ "index": 5,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "test-sonar",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "verifygatesonar",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "SONARQUBE",
+      "helpText": "Sonarqube",
+      "isMultiSupported": false,
+      "label": "Sonarqube",
+      "supportedParams": [
+       {
+        "helpText": "Project Key",
+        "label": "Project Key",
+        "name": "projectKey",
+        "type": "array"
+       }
+      ],
+      "values": [
+       {
+        "projectKey": "OES-UI,oes-visibility-v3.10"
+       }
+      ]
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/11/trigger",
+    "imageIds": "alpine"
+   },
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "type": "approval"
+  },
+  {
+   "name": "Wait",
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "wait",
+   "waitTime": 3
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1642595137779"
+}

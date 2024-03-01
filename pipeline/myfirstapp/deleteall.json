@@ -1,0 +1,45 @@
+{
+ "application": "myfirstapp",
+ "disabled": true,
+ "id": "50c45cd0-be06-4690-ae28-5141b7219947",
+ "index": 5,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "deleteall",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "bluegreenk8s",
+   "app": "myfirstapp",
+   "cloudProvider": "kubernetes",
+   "kinds": [
+    "deployment",
+    "service",
+    "ingress"
+   ],
+   "labelSelectors": {
+    "selectors": [
+     {
+      "key": "release",
+      "kind": "EQUALS",
+      "values": [
+       "${parameters.green_release}"
+      ]
+     }
+    ]
+   },
+   "location": "bluedeploy",
+   "mode": "label",
+   "name": "Delete (Manifest)",
+   "options": {
+    "cascading": true
+   },
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "deleteManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1633693039387"
+}

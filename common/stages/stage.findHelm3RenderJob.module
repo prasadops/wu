@@ -1,0 +1,13 @@
+{
+  "name": "Find Helm3 Render Job",
+  "type": "evaluateVariables",
+  "failOnFailedExpressions": true,
+  "refId": "stage-findhelm3renderjob-module",
+  "requisiteStageRefIds": {{ var "requisiteStageRefIds" ?: [] }},
+  "variables": [
+    {
+      "key": "generator_name",
+      "value": "${#stage('{{ var "renderJobName" ?: "Render Helm3" }}').context.jobStatus.name}"
+    }
+  ]
+}

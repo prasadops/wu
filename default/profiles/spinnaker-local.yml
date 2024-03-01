@@ -1,0 +1,9 @@
+management:
+  metrics.distribution:
+    percentiles[http.server.requests]: 0.95, 0.99
+    percentiles-histogram[http.server.requests]: true
+  endpoints.web:
+    exposure.include: health,info,aop-prometheus
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: aop-prometheus
+  server.port: 8008

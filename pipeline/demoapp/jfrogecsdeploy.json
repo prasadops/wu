@@ -1,0 +1,147 @@
+{
+ "application": "demoapp",
+ "id": "3d64c1f1-2a92-43b9-a205-422a1a6508fd",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "jfrogecsdeploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "imageLabelOrSha": "nginx",
+   "name": "Find Image from Tags",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "ecswurmdev",
+     "application": "demoapp",
+     "associatePublicIpAddress": true,
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "capacityProviderStrategy": [],
+     "cloudProvider": "ecs",
+     "computeUnits": 512,
+     "copySourceScalingPoliciesAndActions": true,
+     "dockerImageCredentialsSecret": "production/opsmxjfrog",
+     "dockerLabels": {},
+     "ecsClusterName": "opsmx-demo-ecscluster",
+     "environmentVariables": {},
+     "freeFormDetails": "wurmdeploy",
+     "healthCheckGracePeriodSeconds": "",
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "imageDescription": {
+      "account": "jfrog-docker",
+      "fromTrigger": true,
+      "imageId": "opsmx.jfrog.io/restapp/simpleapp (Tag resolved at runtime)",
+      "registry": "opsmx.jfrog.io",
+      "repository": "restapp/simpleapp"
+     },
+     "launchType": "FARGATE",
+     "loadBalancers": [],
+     "logDriver": "None",
+     "moniker": {
+      "app": "demoapp",
+      "detail": "wurmdeploy",
+      "stack": "devecs"
+     },
+     "networkMode": "awsvpc",
+     "placementConstraints": [],
+     "placementStrategyName": "None",
+     "placementStrategySequence": [],
+     "preferSourceCapacity": true,
+     "provider": "ecs",
+     "reservedMemory": 1024,
+     "securityGroupNames": [
+      "EC2ContainerService-opsmx-demo-ecscluster-AlbSecurityGroup-7JU9YH4YIJCS",
+      "EC2ContainerService-opsmx-demo-ecscluster-EcsSecurityGroup-MU4WB5DVY698"
+     ],
+     "securityGroups": [],
+     "serviceDiscoveryAssociations": [],
+     "stack": "devecs",
+     "strategy": "highlander",
+     "subnetType": "",
+     "subnetTypes": [
+      "ecs-alb1",
+      "ecs-alb2"
+     ],
+     "tags": {
+      "Name": "Jfrg-WURM-DevECS-Deploy"
+     },
+     "targetGroup": "",
+     "targetGroupMappings": [],
+     "taskDefinitionArtifact": {},
+     "useSourceCapacity": true,
+     "useTaskDefinitionArtifact": false
+    }
+   ],
+   "name": "Dev-ECS-Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Approve"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Promote Deploy to UAT",
+   "notifications": [],
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "selectedStageRoles": [
+    "qa"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "name": "UAT-ECS-Deploy",
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "type": "wait",
+   "waitTime": 30
+  }
+ ],
+ "triggers": [
+  {
+   "account": "jfrog-docker",
+   "enabled": true,
+   "organization": "restapp",
+   "registry": "opsmx.jfrog.io",
+   "repository": "restapp/simpleapp",
+   "type": "docker"
+  }
+ ],
+ "updateTs": "1632492391657"
+}

@@ -1,0 +1,964 @@
+{
+ "appConfig": {},
+ "application": "parametersapp",
+ "disabled": false,
+ "id": "7bd77fc0-02ca-46c9-b7a5-a6d02abc65ee",
+ "index": 19,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "raghuram.m@opsmx.io",
+ "limitConcurrent": true,
+ "name": "deploy-green-ingress",
+ "parameterConfig": [
+  {
+   "default": "v2",
+   "description": "New Version",
+   "hasOptions": false,
+   "label": "",
+   "name": "green_release",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  },
+  {
+   "default": "v1",
+   "description": "Existing Version",
+   "hasOptions": false,
+   "label": "",
+   "name": "blue_release",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  },
+  {
+   "default": "nginx-svc",
+   "description": "",
+   "hasOptions": false,
+   "label": "",
+   "name": "service_name",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "test-environment",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "release": "${parameters.green_release}"
+      },
+      "name": "nginx-deployment-${parameters.green_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "minReadySeconds": 5,
+      "replicas": 1,
+      "selector": {
+       "matchLabels": {
+        "app": "nginx",
+        "release": "${parameters.green_release}"
+       }
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "app": "nginx",
+         "release": "${parameters.green_release}"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "env": [
+           {
+            "name": "APP_COLOR",
+            "value": "green"
+           }
+          ],
+          "image": "quay.io/opsmxpublic/simple-webapp:v2",
+          "name": "webapp-green",
+          "ports": [
+           {
+            "containerPort": 8080
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "apiVersion": "v1",
+     "kind": "Service",
+     "metadata": {
+      "labels": {
+       "release": "${parameters.green_release}"
+      },
+      "name": "${parameters.service_name}-${parameters.green_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "ports": [
+       {
+        "port": 80,
+        "protocol": "TCP",
+        "targetPort": 8080
+       }
+      ],
+      "selector": {
+       "app": "nginx",
+       "release": "${parameters.green_release}"
+      }
+     }
+    }
+   ],
+   "moniker": {
+    "app": "demoapp"
+   },
+   "name": "Deploy Green",
+   "namespaceOverride": "tcp",
+   "refId": "1",
+   "requisiteStageRefIds": [
+    "16",
+    "17"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Blue\") == 'Accept'}",
+    "type": "expression"
+   },
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "account": "test-environment",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "extensions/v1beta1",
+     "kind": "Ingress",
+     "metadata": {
+      "annotations": {
+       "kubernetes.io/ingress.class": "nginx",
+       "nginx.ingress.kubernetes.io/canary": "true",
+       "nginx.ingress.kubernetes.io/canary-weight": "30"
+      },
+      "labels": {
+       "app": "nginx",
+       "release": "${parameters.green_release}"
+      },
+      "name": "nginx-ingress-${parameters.green_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "rules": [
+       {
+        "host": "traffic-testing.iswstash.opsmx.com",
+        "http": {
+         "paths": [
+          {
+           "backend": {
+            "serviceName": "${parameters.service_name}-${parameters.green_release}",
+            "servicePort": 80
+           }
+          }
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "moniker": {
+    "app": "demoapp"
+   },
+   "name": "Redirect 30% Traffic",
+   "namespaceOverride": "tcp",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Blue\") == 'Accept'}",
+    "type": "expression"
+   },
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Accept"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Traffic 1",
+   "notifications": [],
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Blue\") == 'Accept'}",
+    "type": "expression"
+   },
+   "type": "manualJudgment"
+  },
+  {
+   "account": "test-environment",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "extensions/v1beta1",
+     "kind": "Ingress",
+     "metadata": {
+      "annotations": {
+       "kubernetes.io/ingress.class": "nginx",
+       "nginx.ingress.kubernetes.io/canary": "true",
+       "nginx.ingress.kubernetes.io/canary-weight": "50"
+      },
+      "labels": {
+       "app": "nginx",
+       "release": "${parameters.green_release}"
+      },
+      "name": "nginx-ingress-${parameters.green_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "rules": [
+       {
+        "host": "traffic-testing.iswstash.opsmx.com",
+        "http": {
+         "paths": [
+          {
+           "backend": {
+            "serviceName": "${parameters.service_name}-${parameters.green_release}",
+            "servicePort": 80
+           }
+          }
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "moniker": {
+    "app": "demoapp"
+   },
+   "name": "Redirect 50% Traffic",
+   "namespaceOverride": "tcp",
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 1\") == 'Accept'}",
+    "type": "expression"
+   },
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "account": "test-environment",
+   "app": "demoapp",
+   "cloudProvider": "kubernetes",
+   "kinds": [
+    "deployment",
+    "service",
+    "ingress"
+   ],
+   "labelSelectors": {
+    "selectors": [
+     {
+      "key": "release",
+      "kind": "EQUALS",
+      "values": [
+       "${parameters.green_release}"
+      ]
+     }
+    ]
+   },
+   "location": "tcp",
+   "mode": "label",
+   "name": "Roll Back",
+   "options": {
+    "cascading": true
+   },
+   "refId": "5",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 1\") == 'Reject'}",
+    "type": "expression"
+   },
+   "type": "deleteManifest"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Accept"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Traffic 2",
+   "notifications": [],
+   "refId": "6",
+   "requisiteStageRefIds": [
+    "4"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 1\") == 'Accept'}",
+    "type": "expression"
+   },
+   "type": "manualJudgment"
+  },
+  {
+   "account": "test-environment",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "extensions/v1beta1",
+     "kind": "Ingress",
+     "metadata": {
+      "annotations": {
+       "kubernetes.io/ingress.class": "nginx",
+       "nginx.ingress.kubernetes.io/canary": "true",
+       "nginx.ingress.kubernetes.io/canary-weight": "100"
+      },
+      "labels": {
+       "app": "nginx",
+       "release": "${parameters.green_release}"
+      },
+      "name": "nginx-ingress-${parameters.green_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "rules": [
+       {
+        "host": "traffic-testing.iswstash.opsmx.com",
+        "http": {
+         "paths": [
+          {
+           "backend": {
+            "serviceName": "${parameters.service_name}-${parameters.green_release}",
+            "servicePort": 80
+           }
+          }
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "moniker": {
+    "app": "demoapp"
+   },
+   "name": "Redirect 100% Traffic",
+   "namespaceOverride": "tcp",
+   "refId": "7",
+   "requisiteStageRefIds": [
+    "6"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 2\") == 'Accept'}",
+    "type": "expression"
+   },
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "account": "test-environment",
+   "app": "demoapp",
+   "cloudProvider": "kubernetes",
+   "kinds": [
+    "deployment",
+    "service",
+    "ingress"
+   ],
+   "labelSelectors": {
+    "selectors": [
+     {
+      "key": "release",
+      "kind": "EQUALS",
+      "values": [
+       "${parameters.green_release}"
+      ]
+     }
+    ]
+   },
+   "location": "tcp",
+   "mode": "label",
+   "name": "Roll Back",
+   "options": {
+    "cascading": true
+   },
+   "refId": "8",
+   "requisiteStageRefIds": [
+    "6"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 2\") == 'Reject'}",
+    "type": "expression"
+   },
+   "type": "deleteManifest"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Accept"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Traffic 3",
+   "notifications": [],
+   "refId": "9",
+   "requisiteStageRefIds": [
+    "7"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 2\") == 'Accept'}",
+    "type": "expression"
+   },
+   "type": "manualJudgment"
+  },
+  {
+   "failPipeline": true,
+   "instructions": "${parameters.blue_release}",
+   "judgmentInputs": [
+    {
+     "value": "Yes"
+    },
+    {
+     "value": "No"
+    }
+   ],
+   "name": "Scale Down Blue?",
+   "notifications": [],
+   "refId": "10",
+   "requisiteStageRefIds": [
+    "9"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 3\") == 'Accept'}",
+    "type": "expression"
+   },
+   "type": "manualJudgment"
+  },
+  {
+   "account": "test-environment",
+   "app": "demoapp",
+   "cloudProvider": "kubernetes",
+   "kinds": [
+    "deployment",
+    "ingress",
+    "service"
+   ],
+   "labelSelectors": {
+    "selectors": [
+     {
+      "key": "release",
+      "kind": "EQUALS",
+      "values": [
+       "${parameters.green_release}"
+      ]
+     }
+    ]
+   },
+   "location": "tcp",
+   "mode": "label",
+   "name": "Rollback Green Deployment",
+   "options": {
+    "cascading": true
+   },
+   "refId": "11",
+   "requisiteStageRefIds": [
+    "9"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 3\") == 'Reject'}",
+    "type": "expression"
+   },
+   "type": "deleteManifest"
+  },
+  {
+   "account": "test-environment",
+   "app": "demoapp",
+   "cloudProvider": "kubernetes",
+   "location": "tcp",
+   "manifestName": "ingress nginx-ingress-${parameters.blue_release}",
+   "mode": "static",
+   "name": "Delete Blue Ingress",
+   "options": {
+    "cascading": true
+   },
+   "refId": "13",
+   "requisiteStageRefIds": [
+    "10"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Scale Down Blue?\") == 'Yes'}",
+    "type": "expression"
+   },
+   "type": "deleteManifest"
+  },
+  {
+   "account": "test-environment",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "release": "${parameters.blue_release}"
+      },
+      "name": "nginx-deployment-${parameters.blue_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "minReadySeconds": 5,
+      "replicas": 1,
+      "selector": {
+       "matchLabels": {
+        "app": "nginx",
+        "release": "${parameters.blue_release}"
+       }
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "app": "nginx",
+         "release": "${parameters.blue_release}"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "env": [
+           {
+            "name": "APP_COLOR",
+            "value": "blue"
+           }
+          ],
+          "image": "quay.io/opsmxpublic/simple-webapp:v2",
+          "name": "simple-webapp",
+          "ports": [
+           {
+            "containerPort": 8080
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "apiVersion": "v1",
+     "kind": "Service",
+     "metadata": {
+      "labels": {
+       "release": "${parameters.blue_release}"
+      },
+      "name": "${parameters.service_name}-${parameters.blue_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "ports": [
+       {
+        "port": 80,
+        "protocol": "TCP",
+        "targetPort": 8080
+       }
+      ],
+      "selector": {
+       "app": "nginx",
+       "release": "${parameters.blue_release}"
+      }
+     }
+    },
+    {
+     "apiVersion": "extensions/v1beta1",
+     "kind": "Ingress",
+     "metadata": {
+      "annotations": {
+       "kubernetes.io/ingress.class": "nginx"
+      },
+      "labels": {
+       "app": "nginx",
+       "release": "${parameters.blue_release}"
+      },
+      "name": "nginx-ingress-${parameters.blue_release}",
+      "namespace": "tcp"
+     },
+     "spec": {
+      "rules": [
+       {
+        "host": "traffic-testing.iswstash.opsmx.com",
+        "http": {
+         "paths": [
+          {
+           "backend": {
+            "serviceName": "${parameters.service_name}-${parameters.blue_release}",
+            "servicePort": 80
+           }
+          }
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "moniker": {
+    "app": "demoapp"
+   },
+   "name": "Deploy Blue",
+   "namespaceOverride": "tcp",
+   "refId": "15",
+   "requisiteStageRefIds": [],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Accept"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Blue",
+   "notifications": [],
+   "refId": "16",
+   "requisiteStageRefIds": [
+    "15"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "account": "test-environment",
+   "alias": "runJob",
+   "application": "demoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "test-environment",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "name": "hello-world-job",
+     "namespace": "tcp"
+    },
+    "spec": {
+     "completions": 1,
+     "parallelism": 1,
+     "template": {
+      "metadata": {
+       "name": "hello-world-job"
+      },
+      "spec": {
+       "containers": [
+        {
+         "command": [
+          "/bin/sh",
+          "-c",
+          "echo \"scripts in \"\ncurl -I http://traffic-testing.iswstash.opsmx.com/\n"
+         ],
+         "image": "opsmxdev/apline-with-curl",
+         "name": "hello-world-job"
+        }
+       ],
+       "restartPolicy": "Never"
+      }
+     }
+    }
+   },
+   "name": "TestBlue",
+   "refId": "17",
+   "requisiteStageRefIds": [
+    "15"
+   ],
+   "source": "text",
+   "type": "runJobManifest"
+  },
+  {
+   "account": "test-environment",
+   "alias": "runJob",
+   "application": "demoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "test-environment",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "name": "hello-world-job",
+     "namespace": "tcp"
+    },
+    "spec": {
+     "completions": 1,
+     "parallelism": 1,
+     "template": {
+      "metadata": {
+       "name": "hello-world-job"
+      },
+      "spec": {
+       "containers": [
+        {
+         "command": [
+          "/bin/sh",
+          "-c",
+          "echo \"scripts in \"\ncurl -I http://traffic-testing.iswstash.opsmx.com/\n"
+         ],
+         "image": "opsmxdev/apline-with-curl",
+         "name": "hello-world-job"
+        }
+       ],
+       "restartPolicy": "Never"
+      }
+     }
+    }
+   },
+   "name": "Test30%Traffic",
+   "refId": "18",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Blue\") == 'Accept'}",
+    "type": "expression"
+   },
+   "type": "runJobManifest"
+  },
+  {
+   "account": "test-environment",
+   "alias": "runJob",
+   "application": "demoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "test-environment",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "name": "hello-world-job",
+     "namespace": "tcp"
+    },
+    "spec": {
+     "completions": 1,
+     "parallelism": 1,
+     "template": {
+      "metadata": {
+       "name": "hello-world-job"
+      },
+      "spec": {
+       "containers": [
+        {
+         "command": [
+          "/bin/sh",
+          "-c",
+          "echo \"scripts in \"\ncurl -I http://traffic-testing.iswstash.opsmx.com/\n"
+         ],
+         "image": "opsmxdev/apline-with-curl",
+         "name": "hello-world-job"
+        }
+       ],
+       "restartPolicy": "Never"
+      }
+     }
+    }
+   },
+   "name": "Test50%Traffic",
+   "refId": "19",
+   "requisiteStageRefIds": [
+    "4"
+   ],
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 1\") == 'Accept'}",
+    "type": "expression"
+   },
+   "type": "runJobManifest"
+  },
+  {
+   "account": "test-environment",
+   "alias": "runJob",
+   "application": "demoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "test-environment",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "name": "hello-world-job",
+     "namespace": "tcp"
+    },
+    "spec": {
+     "completions": 1,
+     "parallelism": 1,
+     "template": {
+      "metadata": {
+       "name": "hello-world-job"
+      },
+      "spec": {
+       "containers": [
+        {
+         "command": [
+          "/bin/sh",
+          "-c",
+          "echo \"scripts in \"\ncurl -I http://traffic-testing.iswstash.opsmx.com/\n"
+         ],
+         "image": "opsmxdev/apline-with-curl",
+         "name": "hello-world-job"
+        }
+       ],
+       "restartPolicy": "Never"
+      }
+     }
+    }
+   },
+   "name": "Test100%Traffic",
+   "refId": "20",
+   "requisiteStageRefIds": [
+    "7"
+   ],
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 2\") == 'Accept'}",
+    "type": "expression"
+   },
+   "type": "runJobManifest"
+  },
+  {
+   "account": "test-environment",
+   "app": "demoapp",
+   "cloudProvider": "kubernetes",
+   "location": "tcp",
+   "manifestName": "ingress nginx-ingress-${parameters.green_release}",
+   "mode": "static",
+   "name": "Remove Canary Annotations Green Deploy",
+   "options": {
+    "mergeStrategy": "json",
+    "record": false
+   },
+   "patchBody": [
+    {
+     "op": "remove",
+     "path": "/metadata/annotations/nginx.ingress.kubernetes.io~1canary"
+    },
+    {
+     "op": "remove",
+     "path": "/metadata/annotations/nginx.ingress.kubernetes.io~1canary-weight"
+    }
+   ],
+   "refId": "23",
+   "requisiteStageRefIds": [
+    "13"
+   ],
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Scale Down Blue?\") == 'Yes'}",
+    "type": "expression"
+   },
+   "type": "patchManifest"
+  },
+  {
+   "account": "test-environment",
+   "app": "demoapp",
+   "cloudProvider": "kubernetes",
+   "location": "tcp",
+   "manifestName": "deployment nginx-deployment-${parameters.blue_release}",
+   "mode": "static",
+   "name": "Scale Down Blue Deployment",
+   "options": {
+    "mergeStrategy": "strategic",
+    "record": true
+   },
+   "patchBody": [
+    {
+     "spec": {
+      "replicas": 0
+     }
+    }
+   ],
+   "refId": "24",
+   "requisiteStageRefIds": [
+    "10"
+   ],
+   "source": "text",
+   "stageEnabled": {
+    "expression": "${#judgment(\"Scale Down Blue?\") == 'Yes'}",
+    "type": "expression"
+   },
+   "type": "patchManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1650369380609"
+}

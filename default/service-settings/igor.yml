@@ -1,0 +1,26 @@
+#artifactId: quay.io/opsmxpublic/ubi8-spin-igor:v3.12.0
+#artifactId: quay.io/opsmxpublic/ubi8-spin-igor:1.27.0-v4.0-alpha
+artifactId: quay.io/opsmxpublic/ubi8-spin-igor:v3.12-opt
+kubernetes:
+  volumes:
+  #- id: ca-trust-bundle
+  #  mountPath: /etc/pki/ca-trust/extracted/openssl
+  #  type: secret
+  #  readOnly: true
+  #- id: tls-ca-bundle
+  #  mountPath: /etc/pki/ca-trust/extracted/pem
+  #  type: secret
+  #  readOnly: true
+  - id: oes-cacerts
+    mountPath: /etc/pki/ca-trust/extracted/java
+    type: secret
+    readOnly: true
+  podAnnotations:
+    moniker.spinnaker.io/application: spin
+    prometheus.io/path: /aop-prometheus
+    prometheus.io/port: '8008'
+    prometheus.io/scrape: 'true'    
+  useExecHealthCheck: true
+  customHealthCheckExecCommands: ["wget", "--no-check-certificate", "--spider", "-q", "http://localhost:8008/health"] 
+env:
+  JAVA_OPTS: "-XX:MaxRAMPercentage=100.0"

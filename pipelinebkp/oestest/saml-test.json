@@ -1,0 +1,42 @@
+{
+ "application": "oestest",
+ "id": "af8b9acb-eded-4e20-95b7-93b02708b5d5",
+ "index": 9,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "saml-test",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "approval",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "JIRA",
+      "helpText": "Jira",
+      "isMultiSupported": false,
+      "label": "Jira",
+      "supportedParams": [
+       {
+        "helpText": "Jira Id",
+        "label": "Jira Id",
+        "name": "jira_ticket_no",
+        "type": "array"
+       }
+      ],
+      "values": []
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/16/trigger",
+    "imageIds": ""
+   },
+   "payloadConstraint": [],
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "approval"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1646377577583"
+}

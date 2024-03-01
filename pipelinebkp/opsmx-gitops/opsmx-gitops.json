@@ -1,0 +1,46 @@
+{
+ "cloudProviders": "kubernetes",
+ "createTs": "1632125498904",
+ "customBanners": [
+  {
+   "backgroundColor": "var(--color-success-light)",
+   "enabled": true,
+   "text": "**Please see https://github.com/OpsMx/sample-pipelines**",
+   "textColor": "var(--color-text-secondary)"
+  }
+ ],
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "description": "Application required for OpsMx functionality. Admin priviledges required",
+ "email": "support@opsmx.com",
+ "instanceLinks": [
+  {
+   "links": [
+    {
+     "path": "https://github.com/OpsMx/sample-pipelines",
+     "title": "help"
+    }
+   ],
+   "title": "Help and configuration"
+  }
+ ],
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "opsmx-gitops",
+ "permissions": {
+  "EXECUTE": [
+   "devops"
+  ],
+  "READ": [
+   "devops"
+  ],
+  "WRITE": [
+   "devops"
+  ]
+ },
+ "trafficGuards": [],
+ "updateTs": "1642004975999",
+ "user": "anoop@opsmx.io"
+}

@@ -1,0 +1,58 @@
+{
+ "application": "ecsdemoapp",
+ "id": "b7edeec3-9e9f-4bd8-ac9e-e89b8c064adb",
+ "index": 6,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "CanaryAnalysis",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "baseline": {},
+   "canary": {
+    "application": "ecsdemoapp",
+    "canaryConfig": {
+     "canaryAnalysisConfig": {
+      "beginCanaryAnalysisAfterMins": "2",
+      "canaryAnalysisIntervalMins": "30",
+      "lookbackMins": 0,
+      "name": "ECS-Canary-Analysis",
+      "notificationHours": [
+       1
+      ],
+      "useLookback": false
+     },
+     "canaryHealthCheckHandler": {
+      "@class": "com.netflix.spinnaker.mine.CanaryResultHealthCheckHandler",
+      "minimumCanaryResultScore": "70"
+     },
+     "canarySuccessCriteria": {
+      "canaryResultScore": "90"
+     },
+     "combinedCanaryResultStrategy": "AGGREGATE",
+     "lifetimeHours": "1",
+     "name": "CanaryAnalysis - Canary"
+    },
+    "canaryDeployments": [
+     {
+      "@class": ".CanaryTaskDeployment",
+      "accountName": "canva-devecs",
+      "baseline": "ecsdemoapp-ecs-greendeploy",
+      "canary": "ecsdemoapp-ecs-bluedeploy",
+      "type": "cluster"
+     }
+    ],
+    "owner": "anoop@opsmx.io",
+    "watchers": []
+   },
+   "continueOnUnhealthy": false,
+   "name": "ACA Task",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "acaTask"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1635893582000"
+}

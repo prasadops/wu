@@ -1,0 +1,84 @@
+{
+ "application": "sampleapp",
+ "expectedArtifacts": [],
+ "id": "f39eded1-2fc5-44fb-baa9-6cbe8fa010bd",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "git-trigger-deploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "default",
+   "cloudProvider": "kubernetes",
+   "manifestArtifact": {
+    "artifactAccount": "git-artfact",
+    "id": "12b1585c-70ae-4a2d-94cd-aca26686ee63",
+    "type": "github/file"
+   },
+   "moniker": {
+    "app": "sampleapp"
+   },
+   "name": "Deploy (Manifest)",
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "skipExpressionEvaluation": false,
+   "source": "artifact",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "name": "testgate",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "SONARQUBE",
+      "helpText": "Sonarqube",
+      "isMultiSupported": true,
+      "label": "Sonarqube",
+      "supportedParams": [
+       {
+        "helpText": "Branch Name",
+        "label": "Branch Name",
+        "name": "branch",
+        "type": "string"
+       },
+       {
+        "helpText": "Project Key",
+        "label": "Project Key",
+        "name": "projectKey",
+        "type": "array"
+       }
+      ],
+      "values": []
+     }
+    ],
+    "gateUrl": "https://oesui.wurm.opsmx.net/gate/visibilityservice/v5/approvalGates/8/trigger",
+    "imageIds": ""
+   },
+   "payloadConstraint": [],
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "approval"
+  }
+ ],
+ "triggers": [
+  {
+   "enabled": true,
+   "expectedArtifactIds": [],
+   "project": "OpsMx",
+   "slug": "restapp",
+   "source": "github",
+   "type": "git"
+  }
+ ],
+ "updateTs": "1651144409511"
+}

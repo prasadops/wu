@@ -1,0 +1,13 @@
+{
+ "application": "helmdeploy",
+ "id": "8b2339f3-868a-40b5-a99e-96c1df97a202",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "delete-isd",
+ "spelEvaluator": "v4",
+ "stages": [],
+ "triggers": [],
+ "updateTs": "1646400557457"
+}

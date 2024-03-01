@@ -1,0 +1,15 @@
+{
+ "application": "myfirstapp",
+ "disabled": true,
+ "id": "da0cc8e7-8931-41c2-8077-cbfb4c796803",
+ "index": 4,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "deploy-blue-green-ingress",
+ "parameterConfig": [],
+ "spelEvaluator": "v4",
+ "stages": [],
+ "triggers": [],
+ "updateTs": "1633693039418"
+}

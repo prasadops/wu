@@ -1,0 +1,43 @@
+
+  
+{
+  "application": "dinghy",
+  "pipelines": [
+{
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anoop@opsmx.io",
+  "limitConcurrent": true,
+  "spelEvaluator": "v4",
+  "stages": [
+    {
+      "isNew": true,
+      "name": "new-wait-stage-7sec",
+      "refId": "1",
+      "requisiteStageRefIds": [],
+      "type": "wait",
+      "waitTime": 7
+    }
+  ],
+  "triggers": [],
+  "updateTs": "1638958032248"
+}
+    },
+    {
+      "application": "dinghy",
+      "index": 3,
+      "keepWaitingPipelines": false,
+      "limitConcurrent": true,
+      "name": "Made By Dinghy",
+      "stages": [
+        {
+          "name": "Wait",
+          "refId": "1",
+          "requisiteStageRefIds": [],
+          "type": "wait",
+          "waitTime": 60
+        }
+      ],
+      "triggers": []
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+users:
+ - username: anoop@opsmx.io
+   roles:
+   - spin-admn
+   - spin-rwx
+   - spin-QA
+   - spin-dev
+ - username: saiprasad.thukuntla@opsmx.io
+   roles:
+   - spin-rwx
+ - username: hanumesh.kumar@opsmx.io
+   roles:
+   - spin-rwx
+ - username: madhu@opsmx.com
+   roles:
+   - spin-rwx
+ - username: opsmxqa@opsmx.io
+   roles:
+   - spin-QA
+ - username: opsmxdev@opsmx.io
+   roles:
+   - spin-dev
+ - username: kiran@opsmx.io
+   roles:
+   - spin-admn
+   - spin-rwx
+   - spin-QA
+   - spin-dev
+ - username: opsmxqadev@opsmx.io
+   roles:
+   - spin-QA
+   - spin-dev
+ - username: opsmxqadev@opsmx.io
+   roles:
+   - spin-QA
+   - spin-dev
+ - username: scripttest@opsmx.io
+   roles:
+   - spin-QA
+   - spin-dev

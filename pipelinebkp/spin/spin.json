@@ -1,0 +1,4 @@
+{
+ "accounts": "default,isd-spin-helminstall,k8s-account,myaccount,oes-helmdeploy,upgradetest",
+ "name": "spin"
+}

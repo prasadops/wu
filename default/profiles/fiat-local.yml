@@ -1,0 +1,57 @@
+fiat:
+  admin:
+    roles:
+      - admin
+
+#Please uncomment below section if spinnakerrbac is enabled and provide appropriate permissions
+auth.permissions.provider.pipeline: aggregate
+auth.permissions.source.pipeline.prefix:
+  enabled: true
+  prefixes:
+   - prefix: "dev*"
+     permissions:
+       READ:
+       - "devteam-group"
+       - "qateam"
+       WRITE:
+       - "devteam-group"
+       EXECUTE:
+       - "devteam-group"
+   - prefix: "qa*"
+     permissions:
+       READ:
+       - "qateam"
+       - "devteam-group"
+       WRITE:
+       - "qateam"
+       EXECUTE:
+       - "qateam"
+
+spinnaker:
+  extensibility:
+    plugins-root-path: /opt/fiat/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-fiat
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: false
+                
+    repositories:
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json
+
+management:
+  metrics.distribution:
+    percentiles[http.server.requests]: 0.95, 0.99
+    percentiles-histogram[http.server.requests]: true
+  endpoints.web:
+    exposure.include: health,info,aop-prometheus
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: aop-prometheus
+  server.port: 8008           

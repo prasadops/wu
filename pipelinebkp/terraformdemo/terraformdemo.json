@@ -1,0 +1,11 @@
+{
+ "cloudProviders": "kubernetes",
+ "createTs": "1638883303827",
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "terraformdemo",
+ "trafficGuards": [],
+ "updateTs": "1638883303827",
+ "user": "anoop@opsmx.io"
+}

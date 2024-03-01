@@ -1,0 +1,12 @@
+{
+ "accounts": "default,isd-spin-helminstall,k8s-account,oes-helmdeploy",
+ "cloudProviders": "",
+ "createTs": "1641453807128",
+ "email": "hanumesh.kumar@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "helmdeploy",
+ "trafficGuards": [],
+ "updateTs": "1641453807128",
+ "user": "anoop@opsmx.io"
+}

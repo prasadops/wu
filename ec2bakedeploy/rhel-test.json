@@ -1,0 +1,54 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "34427f14-daac-425d-8302-cd485f8773a6",
+ "index": 4,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "rhel-test",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "baseLabel": "release",
+   "baseOs": "RHEL",
+   "cloudProviderType": "aws",
+   "extendedAttributes": {
+    "apiversion": "v1",
+    "aws_subnet_id": "subnet-054c8cc98fedee309",
+    "aws_vpc_id": "vpc-0a4e420b86d55d5b6",
+    "repository": "http://ops-rpm-bucket.s3-website-us-east-1.amazonaws.com"
+   },
+   "name": "Bake",
+   "package": "nginx-1.20.2-1.el8.ngx.x86_64.rpm",
+   "rebake": true,
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "storeType": "ebs",
+   "type": "bake",
+   "user": "anoop@opsmx.io",
+   "vmType": "hvm"
+  },
+  {
+   "continuePipeline": false,
+   "failPipeline": true,
+   "job": "Spin-RPM-AWS-Restapp",
+   "master": "debjenkins",
+   "name": "Jenkins",
+   "parameters": {
+    "AWS_ACCESS_ID": "AKIA2VHYVXSDEUT6BWKE",
+    "AWS_ACCESS_KEY": "1O+sb56v2u9PWxh2viXtIbZqw5WEcZjHIVvWqO8f",
+    "AWS_BUCKET": "wu-upgrade-38"
+   },
+   "refId": "2",
+   "requisiteStageRefIds": [],
+   "type": "jenkins"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1644220328106"
+}

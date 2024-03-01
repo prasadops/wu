@@ -1,0 +1,21 @@
+{
+ "application": "ninjatrainingapp",
+ "id": "ebfb33bf-77c3-426a-a9b9-bb632f74f757",
+ "index": 2,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anonymous",
+ "limitConcurrent": true,
+ "name": "policy",
+ "schema": "1",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "Wait",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "wait",
+   "waitTime": 3
+  }
+ ],
+ "triggers": []
+}

@@ -1,0 +1,89 @@
+{
+ "application": "helmdeploy",
+ "id": "e3297882-1cd2-4685-8f22-9069af4bd37c",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "isd-helminstall",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "expectedArtifacts": [
+    {
+     "defaultArtifact": {
+      "customKind": true,
+      "id": "070070d9-bf31-4d63-bb6a-2042fb121be9"
+     },
+     "displayName": "isdspinhelminstall",
+     "id": "9a31b8ec-37a2-4ebc-886d-8b7118679270",
+     "matchArtifact": {
+      "artifactAccount": "embedded-artifact",
+      "customKind": false,
+      "id": "89548f4f-37a5-42ed-a0ef-c16f21ef76dc",
+      "name": "isdspinhelm",
+      "type": "embedded/base64"
+     },
+     "useDefaultArtifact": false,
+     "usePriorArtifact": false
+    }
+   ],
+   "inputArtifacts": [
+    {
+     "account": "opsmx-oes-helm-repo",
+     "artifact": {
+      "artifactAccount": "opsmx-oes-helm-repo",
+      "id": "cb60d5f8-96c6-42ed-b838-fdc05f30d0f0",
+      "name": "oes",
+      "type": "helm/chart",
+      "version": "3.10.9"
+     }
+    },
+    {
+     "account": "anooptejt-github",
+     "artifact": {
+      "artifactAccount": "anooptejt-github",
+      "id": "2f2bd069-d8e7-48a7-a0b3-8ccfd67b2c89",
+      "name": "isd-values-min.yaml",
+      "reference": "https://api.github.com/repos/anooptejt/isd-spin-install/contents/isd-values-min.yaml",
+      "type": "github/file",
+      "version": "master"
+     }
+    }
+   ],
+   "name": "ISD-Bake",
+   "namespace": "isdspinhelminstall",
+   "outputName": "isdspinhelm",
+   "overrides": {},
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "templateRenderer": "HELM3",
+   "type": "bakeManifest"
+  },
+  {
+   "account": "isd-spin-helminstall",
+   "cloudProvider": "kubernetes",
+   "manifestArtifactId": "9a31b8ec-37a2-4ebc-886d-8b7118679270",
+   "moniker": {
+    "app": "helmdeploy"
+   },
+   "name": "ISD-Deploy",
+   "namespaceOverride": "isdspinhelminstall",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "artifact",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false
+    }
+   },
+   "type": "deployManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1646398446496"
+}

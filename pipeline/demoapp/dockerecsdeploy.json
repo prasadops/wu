@@ -1,0 +1,105 @@
+{
+ "application": "demoapp",
+ "id": "545987cf-1cf0-40f4-a31e-f967ca3b45d4",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "dockerecsdeploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "imageLabelOrSha": "nginx",
+   "name": "Find Image from Tags",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "ecswurmdev",
+     "application": "demoapp",
+     "associatePublicIpAddress": true,
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "ecs",
+     "computeUnits": 512,
+     "copySourceScalingPoliciesAndActions": true,
+     "dockerImageCredentialsSecret": "None (No registry credentials)",
+     "dockerLabels": {},
+     "ecsClusterName": "opsmx-demo-ecscluster",
+     "environmentVariables": {},
+     "freeFormDetails": "dockerdeploy",
+     "healthCheckGracePeriodSeconds": "",
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "imageDescription": {
+      "account": "dockerhub-registry",
+      "imageId": "index.docker.io/opsmx11/restapp:simple-newrelic-restapp-99",
+      "registry": "index.docker.io",
+      "repository": "opsmx11/restapp",
+      "tag": "simple-newrelic-restapp-99"
+     },
+     "launchType": "FARGATE",
+     "loadBalancers": [],
+     "logDriver": "None",
+     "moniker": {
+      "app": "demoapp",
+      "detail": "dockerdeploy",
+      "stack": "wurmecs"
+     },
+     "networkMode": "awsvpc",
+     "placementConstraints": [],
+     "placementStrategyName": "None",
+     "placementStrategySequence": [],
+     "preferSourceCapacity": true,
+     "provider": "ecs",
+     "reservedMemory": 1024,
+     "securityGroupNames": [
+      "spinEC2-New"
+     ],
+     "securityGroups": [],
+     "serviceDiscoveryAssociations": [],
+     "stack": "wurmecs",
+     "strategy": "highlander",
+     "subnetType": "",
+     "subnetTypes": [
+      "external (spinEC2vpc)"
+     ],
+     "tags": {
+      "Name": "WURM ECS DockerDeploy"
+     },
+     "targetGroup": "",
+     "targetGroupMappings": [],
+     "taskDefinitionArtifact": {},
+     "useSourceCapacity": true,
+     "useTaskDefinitionArtifact": false
+    }
+   ],
+   "name": "Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1632488245813"
+}

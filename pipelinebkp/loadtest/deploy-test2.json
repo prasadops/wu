@@ -1,0 +1,27 @@
+{
+ "application": "loadtest",
+ "disabled": true,
+ "exclude": [],
+ "id": "d2958661-e3bc-4b2c-8389-9cc9da8776b3",
+ "index": 201,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "deploy-test2",
+ "notifications": [],
+ "parameterConfig": [],
+ "schema": "v2",
+ "stages": [],
+ "template": {
+  "artifactAccount": "front50ArtifactCredentials",
+  "reference": "spinnaker://DeployToECS:latest",
+  "type": "front50/pipelineTemplate"
+ },
+ "triggers": [],
+ "type": "templatedPipeline",
+ "updateTs": "1636085738000",
+ "variables": {
+  "clusterid": "pipe3",
+  "waitime": 20
+ }
+}

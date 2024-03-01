@@ -1,0 +1,16 @@
+{
+ "cloudProviders": "aws,ecs",
+ "createTs": "1640000364042",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "ec2bakedeploy",
+ "platformHealthOnly": true,
+ "trafficGuards": [],
+ "updateTs": "1644491526749",
+ "user": "anoop@opsmx.io"
+}

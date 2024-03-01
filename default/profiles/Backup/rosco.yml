@@ -1,0 +1,156 @@
+aws:
+  enabled: true
+  bakeryDefaults:
+    baseImages:
+# RHEL BaseOS Image
+    - baseImage:
+        id: RHEL
+        shortDescription: RHEL-8.4
+        detailedDescription: RHEL-8.4 with SQL
+        packageType: rpm
+        templateFile: aws-ebs.json
+      virtualizationSettings:
+      - region: us-east-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0e9678b77e3f7cc96
+        sshUserName: ec2-user
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-east-2
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0170fc126935d44c3
+        sshUserName: ec2-user
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-west-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0d821453063a3c9b1
+        sshUserName: ec2-user
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-west-2
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0c2dfd42fa1fbb52c
+        sshUserName: ec2-user
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+# Ubuntu 14.04 BaseOS Image
+    - baseImage:
+        id: trusty
+        shortDescription: v14.04
+        detailedDescription: Ubuntu Trusty Tahr v14.04
+        packageType: deb
+        # The following AMI ID's were retrieved from here:
+        # https://cloud-images.ubuntu.com/locator/ec2/
+      virtualizationSettings:
+      - region: us-east-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-9d751ee7
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-east-2
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-7960481c
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-west-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-494c4829
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-west-2
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-e8cc6a90
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: eu-central-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-aa30b8c5
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: eu-west-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-fcb43185
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-east-1
+        virtualizationType: pv
+        instanceType: m3.medium
+        sourceAmi: ami-a1701bdb
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-west-1
+        virtualizationType: pv
+        instanceType: m3.medium
+        sourceAmi: ami-b84347d8
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+      - region: us-west-2
+        virtualizationType: pv
+        instanceType: m3.medium
+        sourceAmi: ami-61cf6919
+        sshUserName: ubuntu
+        spotPrice: 0
+        spotPriceAutoProduct: Linux/UNIX (Amazon VPC)
+# Windows Server 2021 BaseOS Image
+    - baseImage:
+       id: windows-2012-r2
+       shortDescription: 2012 R2
+       detailedDescription: Windows Server 2012 R2 Base
+       packageType: nupkg
+       templateFile: aws-windows-2012-r2.json
+       osType: windows
+      virtualizationSettings:
+      - region: us-east-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0ef6fb504535468b2
+        winRmUserName: Administrator
+        spotPrice: 0
+        spotPriceAutoProduct: Windows (Amazon VPC)
+      - region: us-west-2
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0274ca53943a86543
+        winRmUserName: Administrator
+        spotPrice: 0
+        spotPriceAutoProduct: Windows (Amazon VPC)
+      - region: ap-south-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-00ad91b37d56c1d08
+        winRmUserName: Administrator
+        spotPrice: 0
+        spotPriceAutoProduct: Windows (Amazon VPC)
+      - region: eu-west-1
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0a46adf18f8875ad6
+        winRmUserName: Administrator
+        spotPrice: 0
+        spotPriceAutoProduct: Windows (Amazon VPC)
+      - region: eu-west-2
+        virtualizationType: hvm
+        instanceType: t2.micro
+        sourceAmi: ami-0651428174d9438e9
+        winRmUserName: Administrator
+        spotPrice: 0
+        spotPriceAutoProduct: Windows (Amazon VPC)

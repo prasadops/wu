@@ -1,0 +1,140 @@
+{
+ "appConfig": {},
+ "application": "ecsdemoapp",
+ "id": "6205381c-d306-4d9f-a270-b0208aa434af",
+ "index": 1,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "alb-weight-modify",
+ "parameterConfig": [
+  {
+   "default": "1",
+   "description": "",
+   "hasOptions": false,
+   "label": "Blue Weight",
+   "name": "blueweight",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  },
+  {
+   "default": "1",
+   "description": "",
+   "hasOptions": false,
+   "label": "Green Weight",
+   "name": "greenweight",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "default",
+   "alias": "runJob",
+   "application": "ecsdemoapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "default",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "generateName": "albweight",
+     "labels": {
+      "spinnakerlabel": "deljob"
+     },
+     "namespace": "canva"
+    },
+    "spec": {
+     "backoffLimit": 2,
+     "template": {
+      "spec": {
+       "containers": [
+        {
+         "args": [
+          "aws elbv2 describe-listeners --listener-arns arn:aws:elasticloadbalancing:us-east-1:732813442182:listener/app/ecsdemoapp-BlueGreen-Alb/de748614f15fbe0a/37449db8ec86da12\ncat /opsmx/weights.json |sed \"s/blueweight/$BlueWeight/\" |sed \"s/greenweight/$GreenWeight/\" \u003e /tmp/work.json\naws elbv2 modify-listener --listener-arn arn:aws:elasticloadbalancing:us-east-1:732813442182:listener/app/ecsdemoapp-BlueGreen-Alb/de748614f15fbe0a/37449db8ec86da12 --default-actions file:///tmp/work.json\naws elbv2 describe-listeners --listener-arns arn:aws:elasticloadbalancing:us-east-1:732813442182:listener/app/ecsdemoapp-BlueGreen-Alb/de748614f15fbe0a/37449db8ec86da12    "
+         ],
+         "command": [
+          "/bin/sh",
+          "+x",
+          "-c"
+         ],
+         "env": [
+          {
+           "name": "BlueWeight",
+           "value": "${parameters.blueweight}"
+          },
+          {
+           "name": "GreenWeight",
+           "value": "${parameters.greenweight}"
+          }
+         ],
+         "image": "quay.io/opsmxpublic/awsgit:v2",
+         "name": "awscli",
+         "volumeMounts": [
+          {
+           "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+           "name": "default-token-92zzm",
+           "readOnly": true
+          },
+          {
+           "mountPath": "/root/.aws/",
+           "name": "awssecrets",
+           "readOnly": true
+          },
+          {
+           "mountPath": "/opsmx/",
+           "name": "albweights",
+           "readOnly": true
+          }
+         ]
+        }
+       ],
+       "restartPolicy": "Never",
+       "volumes": [
+        {
+         "name": "default-token-92zzm",
+         "secret": {
+          "defaultMode": 420,
+          "secretName": "default-token-92zzm"
+         }
+        },
+        {
+         "name": "awssecrets",
+         "secret": {
+          "defaultMode": 420,
+          "secretName": "awssecrets"
+         }
+        },
+        {
+         "configMap": {
+          "defaultMode": 420,
+          "name": "albweights"
+         },
+         "name": "albweights"
+        }
+       ]
+      }
+     }
+    }
+   },
+   "name": "Run Job (Manifest)",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "source": "text",
+   "type": "runJobManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1635883886000"
+}

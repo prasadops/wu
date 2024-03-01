@@ -1,0 +1,54 @@
+{
+ "application": "oestest",
+ "id": "91abbc39-1881-4499-a60d-8e3cce606570",
+ "index": 6,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "approval-sonarqube",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "Wait",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "wait",
+   "waitTime": 3
+  },
+  {
+   "name": "approve-stage",
+   "parameters": {
+    "connectors": [
+     {
+      "connectorType": "JFROG",
+      "helpText": "Jfrog",
+      "isMultiSupported": false,
+      "label": "Jfrog",
+      "supportedParams": [
+       {
+        "helpText": "Watch",
+        "label": "Watch",
+        "name": "watch_name",
+        "type": "array"
+       }
+      ],
+      "values": [
+       {
+        "watch_name": "opsmxwatch"
+       }
+      ]
+     }
+    ],
+    "gateUrl": "https://oesgate.wurm.opsmx.net/visibilityservice/v5/approvalGates/12/trigger",
+    "imageIds": "alpine"
+   },
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "approval"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1644224889623"
+}

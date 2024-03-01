@@ -1,0 +1,79 @@
+{
+ "application": "demoapp",
+ "id": "aedec523-23e8-4006-bcea-420341afba5e",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "helmdeploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "expectedArtifacts": [
+    {
+     "defaultArtifact": {
+      "customKind": true,
+      "id": "5d18bafc-e2c9-4bf6-a99a-963821ca5f97"
+     },
+     "displayName": "helloworldbake",
+     "id": "b39f95a0-0ee1-4a36-8041-2bb54154dff3",
+     "matchArtifact": {
+      "artifactAccount": "embedded-artifact",
+      "customKind": false,
+      "id": "bb43a246-e042-4529-8cc0-9df34d749ad1",
+      "name": "helloworld",
+      "type": "embedded/base64"
+     },
+     "useDefaultArtifact": false,
+     "usePriorArtifact": false
+    }
+   ],
+   "inputArtifacts": [
+    {
+     "account": "jfrogaccount",
+     "artifact": {
+      "artifactAccount": "jfrogaccount",
+      "id": "20a8c8e2-563f-4cfd-9d6f-04741060a361",
+      "name": "helloworld",
+      "type": "helm/chart",
+      "version": "1.2.0"
+     }
+    }
+   ],
+   "name": "HelloWorldBake",
+   "namespace": "spinnaker",
+   "outputName": "helloworld",
+   "overrides": {},
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "templateRenderer": "HELM3",
+   "type": "bakeManifest"
+  },
+  {
+   "account": "bluegreenk8s",
+   "cloudProvider": "kubernetes",
+   "manifestArtifactId": "b39f95a0-0ee1-4a36-8041-2bb54154dff3",
+   "moniker": {
+    "app": "demoapp"
+   },
+   "name": "HelmDeploy",
+   "namespaceOverride": "spinnaker",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "skipExpressionEvaluation": false,
+   "source": "artifact",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1634366062509"
+}

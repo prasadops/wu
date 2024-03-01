@@ -1,0 +1,43 @@
+{
+ "application": "ec2bakedeploy",
+ "id": "e0066937-1325-4288-9507-27627a71daf8",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "aws-windows-bake",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "amiName": "winchoco",
+   "baseLabel": "release",
+   "baseOs": "windows-2012-r2",
+   "cloudProviderType": "aws",
+   "extendedAttributes": {
+    "chocolateyRepository": "http://20.120.81.192/chocolatey",
+    "customRepository": "http://20.120.81.192/chocolatey"
+   },
+   "name": "Bake",
+   "package": "opsmxchoco",
+   "rebake": true,
+   "refId": "2",
+   "regions": [
+    "us-west-2"
+   ],
+   "requisiteStageRefIds": [],
+   "storeType": "ebs",
+   "type": "bake",
+   "user": "anoop@opsmx.io",
+   "vmType": "hvm"
+  }
+ ],
+ "triggers": [
+  {
+   "enabled": false,
+   "job": "Dev-Win-Choco-Build",
+   "master": "jenkins-dev",
+   "type": "jenkins"
+  }
+ ],
+ "updateTs": "1644414325401"
+}

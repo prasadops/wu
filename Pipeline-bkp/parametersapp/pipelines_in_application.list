@@ -1,0 +1,26 @@
+sfcc-account-service-int-to-prod
+sfcc-account-service
+sfcc-cart-service
+sfcc-checkout-scheduler
+sfcc-checkout-service
+sfcc-federation-gateway
+sfcc-inventory-service
+sfcc-notification-service
+sfcc-payment-service
+sfcc-loyalty-service
+sfcc-third-party-payment
+sfcc-wallet-service
+sfcc-account-ext-service
+sfcc-account-scheduler
+sfcc-borderfree-service
+sfcc-order-service
+sfcc-plcc-service
+sfcc-wallet-scheduler
+sfcc-wishlist-service
+deploy-green-ingress
+blue deploy
+APPSYNC_TCP
+XT
+Deploy_from_UAT_to_Prod
+UAT-to-Prod
+testpipeline

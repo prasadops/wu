@@ -1,0 +1,133 @@
+{
+ "application": "demoapp1",
+ "id": "8c2cc283-c3b2-49db-8bae-59be8fe86f8f",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "apiecsdeploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "imageLabelOrSha": "nginx",
+   "name": "Find Image from Tags",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "canva-devecs",
+     "application": "demoapp1",
+     "associatePublicIpAddress": true,
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "ecs",
+     "computeUnits": 512,
+     "copySourceScalingPoliciesAndActions": true,
+     "dockerImageCredentialsSecret": "None (No registry credentials)",
+     "dockerLabels": {},
+     "ecsClusterName": "opsmx-ecs-fargate",
+     "environmentVariables": {},
+     "freeFormDetails": "deploy",
+     "healthCheckGracePeriodSeconds": "",
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "imageDescription": {
+      "account": "dockerhub",
+      "imageId": "index.docker.io/library/nginx:1.17.8",
+      "registry": "index.docker.io",
+      "repository": "library/nginx",
+      "tag": "1.17.8"
+     },
+     "launchType": "FARGATE",
+     "loadBalancers": [],
+     "moniker": {
+      "app": "demoapp1",
+      "detail": "deploy",
+      "stack": "nginx"
+     },
+     "networkMode": "awsvpc",
+     "placementConstraints": [],
+     "placementStrategyName": "None",
+     "placementStrategySequence": [],
+     "preferSourceCapacity": true,
+     "provider": "ecs",
+     "reservedMemory": 1024,
+     "securityGroupNames": [
+      "spinEC2-New"
+     ],
+     "securityGroups": [],
+     "serviceDiscoveryAssociations": [],
+     "stack": "nginx",
+     "strategy": "highlander",
+     "subnetType": "",
+     "subnetTypes": [
+      "external (spinEC2vpc)"
+     ],
+     "tags": {},
+     "targetGroup": "",
+     "targetGroupMappings": [],
+     "taskDefinitionArtifact": {},
+     "useSourceCapacity": true,
+     "useTaskDefinitionArtifact": false,
+     "vpcLoadBalancers": []
+    }
+   ],
+   "name": "Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  },
+  {
+   "action": "scale_exact",
+   "capacity": {
+    "desired": 0,
+    "max": 1,
+    "min": 0
+   },
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "demoapp1-nginx-deploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "demoapp1",
+    "cluster": "demoapp1-nginx-deploy",
+    "detail": "deploy",
+    "stack": "nginx"
+   },
+   "name": "Resize Server Group",
+   "refId": "3",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "resizeType": "exact",
+   "target": "current_asg_dynamic",
+   "targetHealthyDeployPercentage": 100,
+   "type": "resizeServerGroup"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1636024332000"
+}

@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  repo.properties: |
+    #properties file for pipeline promotion scripts
+
+    repo_type=git
+    repo_name=WU-RM-Repo
+    root_folder=
+
+    git_url=github.com
+    git_project=OpsMx
+    git_user=hanumeshc
+kind: ConfigMap
+metadata:
+  name: pipe-promot-config

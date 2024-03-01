@@ -1,0 +1,55 @@
+apiVersion: v2
+appVersion: 3.12.6
+dependencies:
+- condition: global.installOpenLdap
+  name: openldap
+  repository: ""
+  version: 1.2.3
+- condition: installSpinnaker
+  name: spinnaker
+  repository: ""
+  version: 2.2.3
+- condition: global.minio.enabled
+  name: minio
+  repository: ""
+  version: 8.0.9
+- condition: installRedis
+  name: redis
+  repository: ""
+  version: 10.5.3
+- condition: enableCentralLogging
+  name: elasticsearch
+  repository: ""
+  version: 7.5.0
+- condition: enableCentralLogging
+  name: kibana
+  repository: ""
+  version: 7.5.0
+- condition: enableCentralLogging
+  name: fluent-bit
+  repository: ""
+  version: 2.8.2
+- condition: global.enableCentralMonitoring
+  name: prometheus
+  repository: ""
+  version: 11.16.2
+- condition: global.enableCentralMonitoring
+  name: grafana
+  repository: ""
+  version: 6.31.0
+- condition: global.gitea.enabled
+  name: gitea
+  repository: ""
+  version: 5.0.1
+description: ISD-3.12.6 - Improvements in loading application, delivery insights page and fixed issues related to log and metric analysis
+home: https://www.opsmx.com/
+icon: https://raw.githubusercontent.com/OpsMx/enterprise-spinnaker/master/img/opsmx.png
+keywords:
+- OpsMx
+- OES
+- Autopilot
+maintainers:
+- email: srinivas@opsmx.io
+  name: ksrinimba
+name: oes
+version: 3.12.10

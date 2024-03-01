@@ -1,0 +1,19 @@
+{
+ "accounts": "canva-devecs,k8sdev",
+ "cloudProviders": "aws,ecs,kubernetes",
+ "dataSources": {
+  "disabled": [],
+  "enabled": [
+   "canaryConfigs"
+  ]
+ },
+ "description": "ECS Canary Deploy",
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "admin",
+ "name": "canvademoapp",
+ "platformHealthOnly": false,
+ "trafficGuards": [],
+ "updateTs": "1635840599000",
+ "user": "admin"
+}

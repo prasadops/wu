@@ -1,0 +1,118 @@
+{
+ "application": "loadtest",
+ "id": "c449bbd1-b161-47d3-88d8-3fc68b510c6d",
+ "index": 32,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "pipe38",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "imageLabelOrSha": "nginx",
+   "name": "Find Image from Tags",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "canva-devecs",
+     "application": "loadtest",
+     "associatePublicIpAddress": true,
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "ecs",
+     "computeUnits": 512,
+     "copySourceScalingPoliciesAndActions": true,
+     "dockerImageCredentialsSecret": "None (No registry credentials)",
+     "dockerLabels": {},
+     "ecsClusterName": "opsmx-ecs-fargate",
+     "environmentVariables": {},
+     "freeFormDetails": "deploy",
+     "healthCheckGracePeriodSeconds": "",
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "imageDescription": {
+      "account": "dockerhub",
+      "imageId": "index.docker.io/library/nginx:1.17.8",
+      "registry": "index.docker.io",
+      "repository": "library/nginx",
+      "tag": "1.17.8"
+     },
+     "launchType": "FARGATE",
+     "loadBalancers": [],
+     "moniker": {
+      "app": "loadtest",
+      "detail": "deploy",
+      "stack": "pipe38"
+     },
+     "networkMode": "awsvpc",
+     "placementConstraints": [],
+     "placementStrategyName": "None",
+     "placementStrategySequence": [],
+     "preferSourceCapacity": true,
+     "provider": "ecs",
+     "reservedMemory": 1024,
+     "securityGroupNames": [
+      "spinEC2-New"
+     ],
+     "securityGroups": [],
+     "serviceDiscoveryAssociations": [],
+     "stack": "pipe38",
+     "strategy": "highlander",
+     "subnetType": "",
+     "subnetTypes": [
+      "external (spinEC2vpc)"
+     ],
+     "tags": {},
+     "targetGroup": "",
+     "targetGroupMappings": [],
+     "taskDefinitionArtifact": {},
+     "useSourceCapacity": true,
+     "useTaskDefinitionArtifact": false,
+     "vpcLoadBalancers": []
+    }
+   ],
+   "name": "Deploy",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "7"
+   ],
+   "type": "deploy"
+  },
+  {
+   "name": "Wait",
+   "refId": "7",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "wait",
+   "waitTime": 38
+  }
+ ],
+ "triggers": [
+  {
+   "enabled": true,
+   "source": "allatonce",
+   "type": "webhook"
+  }
+ ],
+ "updateTs": "1636100916000"
+}

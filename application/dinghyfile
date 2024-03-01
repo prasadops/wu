@@ -1,0 +1,43 @@
+{
+  "application": "testdinghy",
+  "deleteStalePipelines": true,
+  "globals": {
+    "application": "test-app30",
+    "appCode": "test",
+    "appNamespace": "test-app-ns",
+    "registryAccount": "escoacrprod01",
+    "dockerRegistry": "escoacrprod01.azurecr.io",
+    "env": "new",
+    "dockerImageArtifactId": "dockerImageArtifactId",
+    "helmChartArtifactId": "helmBakedChartArtifactId",
+    "deployArtifactTo": "nonprod-ba",
+    "notificationAddress": "Platform.DevOps@Albertsons.com",
+    "helmChartName": "test-app30",
+    "imageTag": "SpinnakerdevTest",
+    "save_app_on_update": true
+  },
+  "pipelines": [
+    {{- range $i, $app := makeSlice "test-app-pipeline" }}
+    {{ if $i }},{{ end }}
+      {{
+        module "common/pipelines/pipeline.standard.module"
+        "applicationName" .
+        "triggerOnDocker" false
+	"triggerOnJenkins" false
+
+	        "helmChartParams" "--set configfile=env/${trigger['parameters'].Environment}/${trigger['parameters'].AppName}/configmap.yaml -f ${trigger['parameters'].HelmChart}/env/${trigger['parameters'].Environment}/${trigger['parameters'].AppName}/values.yaml"
+	
+      }}
+    {{- end }}
+  ],
+  "spec": {
+  "email": "Platform.DevOps@Albertsons.com",
+  "description": "testing hassan vali",
+     "permissions": {
+        "READ": [ "b92d7608-990b-48c7-bc51-1b080d9a5b64", "e4f55ebc-9902-4441-b79a-35069a3da7e2" ],
+        "EXECUTE": [ "b92d7608-990b-48c7-bc51-1b080d9a5b64", "e4f55ebc-9902-4441-b79a-35069a3da7e2" ],
+		"WRITE": [ "b92d7608-990b-48c7-bc51-1b080d9a5b64", "e4f55ebc-9902-4441-b79a-35069a3da7e2" ]
+        
+     }
+  }
+}

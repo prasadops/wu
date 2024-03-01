@@ -1,0 +1,32 @@
+{
+ "accounts": "ecswurmdev",
+ "cloudProviders": "aws,ecs,kubernetes",
+ "createTs": "1632394924688",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "demoapp2",
+ "permissions": {
+  "EXECUTE": [
+   "qa",
+   "devops",
+   "admin"
+  ],
+  "READ": [
+   "qa",
+   "devops",
+   "admin"
+  ],
+  "WRITE": [
+   "admin"
+  ]
+ },
+ "platformHealthOnly": true,
+ "trafficGuards": [],
+ "updateTs": "1632492271625",
+ "user": "anoop@opsmx.io"
+}

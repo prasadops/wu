@@ -1,0 +1,21 @@
+{
+ "application": "oestest",
+ "id": "415764d9-c199-432c-ad5a-0f6b88c164bb",
+ "index": 7,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "wait",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "name": "new-wait-stage-5sec",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "wait",
+   "waitTime": 5
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1642595137699"
+}

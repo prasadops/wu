@@ -1,0 +1,474 @@
+{
+ "application": "ecsdemoapp",
+ "id": "5a88e8cd-ed99-4a10-9b97-bc9e11b9f19f",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "Blue-GreenECS-Deploy",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "imageLabelOrSha": "nginx",
+   "name": "Find Image from Tags",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "findImageFromTags"
+  },
+  {
+   "clusters": [
+    {
+     "account": "canva-devecs",
+     "application": "ecsdemoapp",
+     "associatePublicIpAddress": true,
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "capacityProviderStrategy": [],
+     "cloudProvider": "ecs",
+     "computeUnits": 512,
+     "copySourceScalingPoliciesAndActions": true,
+     "delayBeforeDisableSec": 0,
+     "delayBeforeScaleDownSec": 0,
+     "dockerImageCredentialsSecret": "production/opsmxjfrog",
+     "dockerLabels": {},
+     "ecsClusterName": "opsmx-ecs-fargate",
+     "environmentVariables": {
+      "APP_COLOR": "blue"
+     },
+     "freeFormDetails": "bluedeploy",
+     "healthCheckGracePeriodSeconds": "",
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "imageDescription": {
+      "account": "jfrog-docker",
+      "fromTrigger": true,
+      "imageId": "opsmx.jfrog.io/default-docker-local/simple-webapp (Tag resolved at runtime)",
+      "registry": "opsmx.jfrog.io",
+      "repository": "default-docker-local/simple-webapp"
+     },
+     "launchType": "FARGATE",
+     "loadBalancers": [],
+     "logDriver": "None",
+     "moniker": {
+      "app": "ecsdemoapp",
+      "detail": "bluedeploy",
+      "stack": "ecs"
+     },
+     "networkMode": "awsvpc",
+     "placementConstraints": [],
+     "placementStrategyName": "None",
+     "placementStrategySequence": [],
+     "preferSourceCapacity": true,
+     "provider": "ecs",
+     "reservedMemory": 1024,
+     "rollback": {
+      "onFailure": true
+     },
+     "securityGroupNames": [
+      "spinEC2-New"
+     ],
+     "securityGroups": [
+      "spinEC2-New"
+     ],
+     "serviceDiscoveryAssociations": [],
+     "stack": "ecs",
+     "strategy": "highlander",
+     "subnetType": "",
+     "subnetTypes": [
+      "external (spinEC2vpc)"
+     ],
+     "tags": {
+      "Name": "Dev-ECSBlue-Deploy"
+     },
+     "targetGroup": "",
+     "targetGroupMappings": [
+      {
+       "containerName": "",
+       "containerPort": 8080,
+       "targetGroup": "ecsdemoapp-BlueTgp"
+      }
+     ],
+     "taskDefinitionArtifact": {},
+     "useSourceCapacity": true,
+     "useTaskDefinitionArtifact": false,
+     "vpcLoadBalancers": []
+    }
+   ],
+   "name": "ECS-BlueDeploy",
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "4"
+   ],
+   "type": "deploy"
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Approve"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Green",
+   "notifications": [],
+   "refId": "4",
+   "requisiteStageRefIds": [
+    "5"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "clusters": [
+    {
+     "account": "canva-devecs",
+     "application": "ecsdemoapp",
+     "associatePublicIpAddress": true,
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "capacityProviderStrategy": [],
+     "cloudProvider": "ecs",
+     "computeUnits": 512,
+     "copySourceScalingPoliciesAndActions": true,
+     "delayBeforeDisableSec": 0,
+     "delayBeforeScaleDownSec": 0,
+     "dockerImageCredentialsSecret": "production/opsmxjfrog",
+     "dockerLabels": {},
+     "ecsClusterName": "opsmx-ecs-fargate",
+     "environmentVariables": {
+      "APP_COLOR": "green"
+     },
+     "freeFormDetails": "greendeploy",
+     "healthCheckGracePeriodSeconds": "",
+     "healthCheckType": "EC2",
+     "iamRole": "CA-ROL-Spinnaker-Managed-role",
+     "imageDescription": {
+      "account": "jfrog-docker",
+      "fromTrigger": true,
+      "imageId": "opsmx.jfrog.io/default-docker-local/simple-webapp (Tag resolved at runtime)",
+      "registry": "opsmx.jfrog.io",
+      "repository": "default-docker-local/simple-webapp"
+     },
+     "launchType": "FARGATE",
+     "loadBalancers": [],
+     "logDriver": "None",
+     "moniker": {
+      "app": "ecsdemoapp",
+      "detail": "greendeploy",
+      "stack": "ecs"
+     },
+     "networkMode": "awsvpc",
+     "placementConstraints": [],
+     "placementStrategyName": "None",
+     "placementStrategySequence": [],
+     "preferSourceCapacity": true,
+     "provider": "ecs",
+     "reservedMemory": 1024,
+     "rollback": {
+      "onFailure": true
+     },
+     "securityGroupNames": [
+      "spinEC2-New"
+     ],
+     "securityGroups": [
+      "spinEC2-New"
+     ],
+     "serviceDiscoveryAssociations": [],
+     "stack": "ecs",
+     "strategy": "highlander",
+     "subnetType": "",
+     "subnetTypes": [
+      "external (spinEC2vpc)"
+     ],
+     "tags": {
+      "Name": "Dev-ECSGreen-Deploy"
+     },
+     "targetGroup": "",
+     "targetGroupMappings": [
+      {
+       "containerName": "",
+       "containerPort": 8080,
+       "targetGroup": "ecsdemoapp-GreenDeploy-Alb"
+      }
+     ],
+     "taskDefinitionArtifact": {},
+     "useSourceCapacity": true,
+     "useTaskDefinitionArtifact": false,
+     "vpcLoadBalancers": []
+    }
+   ],
+   "name": "ECS-GreenDeploy",
+   "refId": "5",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "deploy"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Redirect 1% Traffic to Blue",
+   "pipeline": "6205381c-d306-4d9f-a270-b0208aa434af",
+   "pipelineParameters": {
+    "blueweight": "1",
+    "greenweight": "99"
+   },
+   "refId": "6",
+   "requisiteStageRefIds": [
+    "3"
+   ],
+   "type": "pipeline",
+   "waitForCompletion": true
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Approve"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Traffic 1",
+   "notifications": [],
+   "refId": "7",
+   "requisiteStageRefIds": [
+    "6"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Redirect 10% Traffic to Blue",
+   "pipeline": "6205381c-d306-4d9f-a270-b0208aa434af",
+   "pipelineParameters": {
+    "blueweight": "1",
+    "greenweight": "5"
+   },
+   "refId": "8",
+   "requisiteStageRefIds": [
+    "7"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 1\") == 'Approve'}",
+    "type": "expression"
+   },
+   "type": "pipeline",
+   "waitForCompletion": true
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Approve"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Traffic 10",
+   "notifications": [],
+   "refId": "10",
+   "requisiteStageRefIds": [
+    "8"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Redirect 50% Traffic to Blue",
+   "pipeline": "6205381c-d306-4d9f-a270-b0208aa434af",
+   "pipelineParameters": {
+    "blueweight": "1",
+    "greenweight": "1"
+   },
+   "refId": "11",
+   "requisiteStageRefIds": [
+    "10"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 10\") == 'Approve'}",
+    "type": "expression"
+   },
+   "type": "pipeline",
+   "waitForCompletion": true
+  },
+  {
+   "failPipeline": true,
+   "judgmentInputs": [
+    {
+     "value": "Approve"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Traffic 50",
+   "notifications": [],
+   "refId": "12",
+   "requisiteStageRefIds": [
+    "11"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Redirect 100% Traffic to Blue",
+   "pipeline": "6205381c-d306-4d9f-a270-b0208aa434af",
+   "pipelineParameters": {
+    "blueweight": "1",
+    "greenweight": "0"
+   },
+   "refId": "13",
+   "requisiteStageRefIds": [
+    "12"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Traffic 50\") == 'Approve'}",
+    "type": "expression"
+   },
+   "type": "pipeline",
+   "waitForCompletion": true
+  },
+  {
+   "failPipeline": true,
+   "instructions": "In Case of Issues Rollback Deployment to Green if everything looks good then ScaleUp Blue to 100 TaskDefinitions",
+   "judgmentInputs": [
+    {
+     "value": "Approve"
+    },
+    {
+     "value": "Reject"
+    }
+   ],
+   "name": "Validate Blue Deploy",
+   "notifications": [],
+   "refId": "14",
+   "requisiteStageRefIds": [
+    "13"
+   ],
+   "type": "manualJudgment"
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "RollBack-GreenDeploy",
+   "pipeline": "812dd020-a923-4bd5-8ab7-9d09f3291963",
+   "pipelineParameters": {
+    "number": "1"
+   },
+   "refId": "15",
+   "requisiteStageRefIds": [
+    "14"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Blue Deploy\") == 'Reject'}",
+    "type": "expression"
+   },
+   "type": "pipeline",
+   "waitForCompletion": true
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "Scale-Blue to 100 TaskDefinitions",
+   "pipeline": "7af296ff-7d22-4a6b-8787-473c41da3a9f",
+   "pipelineParameters": {},
+   "refId": "17",
+   "requisiteStageRefIds": [
+    "14"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Blue Deploy\") == 'Approve'}",
+    "type": "expression"
+   },
+   "type": "pipeline",
+   "waitForCompletion": true
+  },
+  {
+   "application": "ecsdemoapp",
+   "failPipeline": true,
+   "name": "ScaleDown-Green",
+   "pipeline": "0ffdc166-c7c3-4db9-89a2-1f2c4a1fc139",
+   "pipelineParameters": {
+    "number": "0"
+   },
+   "refId": "18",
+   "requisiteStageRefIds": [
+    "14"
+   ],
+   "type": "pipeline",
+   "waitForCompletion": true
+  },
+  {
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "ecsdemoapp-ecs-bluedeploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "ecsdemoapp",
+    "cluster": "ecsdemoapp-ecs-bluedeploy",
+    "detail": "bluedeploy",
+    "stack": "ecs"
+   },
+   "name": "Destroy-BlueDeploy",
+   "refId": "19",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [
+    "15"
+   ],
+   "stageEnabled": {
+    "expression": "${#judgment(\"Validate Blue Deploy\") == 'Reject'}",
+    "type": "expression"
+   },
+   "target": "current_asg_dynamic",
+   "type": "destroyServerGroup"
+  }
+ ],
+ "triggers": [
+  {
+   "account": "jfrog-docker",
+   "enabled": true,
+   "organization": "default-docker-local",
+   "registry": "opsmx.jfrog.io",
+   "repository": "default-docker-local/simple-webapp",
+   "type": "docker"
+  }
+ ],
+ "updateTs": "1637810448000"
+}

@@ -1,0 +1,113 @@
+{
+ "application": "promotion2",
+ "index": 0,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "deploy1",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "default",
+   "cloudProvider": "kubernetes",
+   "manifests": [
+    {
+     "apiVersion": "apps/v1",
+     "kind": "Deployment",
+     "metadata": {
+      "labels": {
+       "app": "nginx"
+      },
+      "name": "nginx-deployment"
+     },
+     "spec": {
+      "replicas": 1,
+      "selector": {
+       "matchLabels": {
+        "app": "nginx"
+       }
+      },
+      "template": {
+       "metadata": {
+        "labels": {
+         "app": "nginx"
+        }
+       },
+       "spec": {
+        "containers": [
+         {
+          "image": "nginx:1.14.2",
+          "name": "nginx",
+          "ports": [
+           {
+            "containerPort": 80
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   ],
+   "moniker": {
+    "app": "promotion2"
+   },
+   "name": "Deploy (Manifest)",
+   "namespaceOverride": "default",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "skipExpressionEvaluation": false,
+   "source": "text",
+   "trafficManagement": {
+    "enabled": false,
+    "options": {
+     "enableTraffic": false,
+     "services": []
+    }
+   },
+   "type": "deployManifest"
+  },
+  {
+   "name": "Wait",
+   "refId": "2",
+   "requisiteStageRefIds": [
+    "1"
+   ],
+   "type": "wait",
+   "waitTime": 5
+  },
+  {
+   "account": "default",
+   "app": "promotion2",
+   "cloudProvider": "kubernetes",
+   "kinds": [
+    "deployment"
+   ],
+   "labelSelectors": {
+    "selectors": [
+     {
+      "key": "app",
+      "kind": "EQUALS",
+      "values": [
+       "nginx"
+      ]
+     }
+    ]
+   },
+   "location": "default",
+   "mode": "label",
+   "name": "Delete (Manifest)",
+   "options": {
+    "cascading": true
+   },
+   "refId": "3",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "deleteManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1632466670506"
+}

@@ -1,0 +1,15 @@
+{
+ "accounts": "canva-devecs",
+ "cloudProviders": "aws,ecs,kubernetes",
+ "dataSources": {
+  "disabled": [],
+  "enabled": []
+ },
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "admin",
+ "name": "demoapp1",
+ "trafficGuards": [],
+ "updateTs": "1635861279000",
+ "user": "admin"
+}

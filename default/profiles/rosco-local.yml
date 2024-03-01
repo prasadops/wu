@@ -1,0 +1,35 @@
+debianRepository: http://ops-restapp-bucket.s3-website-us-west-2.amazonaws.com trusty main
+yumRepository: http://ops-rpm-bucket.s3-website-us-east-1.amazonaws.com
+# logging:
+#  level:
+#    com.netflix.spinnaker.rosco.security: DEBUG
+#    com.netflix.spinnaker.rosco: DEBUG
+#    org.springframework.security: DEBUG
+#    org.springframework.web: DEBUG
+spinnaker:
+  extensibility:
+    plugins-root-path: /opt/rosco/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-rosco
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: false
+                
+    repositories:
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json
+management:
+  metrics.distribution:
+    percentiles[http.server.requests]: 0.95, 0.99
+    percentiles-histogram[http.server.requests]: true
+  endpoints.web:
+    exposure.include: health,info,aop-prometheus
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: aop-prometheus
+  server.port: 8008

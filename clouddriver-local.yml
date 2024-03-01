@@ -1,0 +1,64 @@
+kubernetes:
+  enabled: true
+  accounts:
+  - name: "kubernetes-test"
+    liveManifestCalls: true
+    requiredGroupMembership: []
+    providerVersion: "V2"
+    permissions: {}
+    dockerRegistries: []
+    kubeconfigFile: "configserver:kubeCfg_kubernetes-test"
+    configureImagePullSecrets: true
+    serviceAccount: false
+    cacheThreads: 1
+    namespaces:
+    - "oes"
+    omitNamespaces: []
+    kinds: []
+    omitKinds:
+    - "podPreset"
+    customResources: []
+    cachingPolicies: []
+    onlySpinnakerManaged: true
+    checkPermissionsOnStartup: false
+  - name: "k8s-testing"
+    liveManifestCalls: true
+    requiredGroupMembership: []
+    providerVersion: "v2"
+    permissions: {}
+    dockerRegistries: []
+    kubeconfigFile: "configserver:kubeCfg_k8s-testing"
+    configureImagePullSecrets: true
+    serviceAccount: false
+    cacheThreads: 1
+    namespaces:
+    - "oes"
+    omitNamespaces: []
+    kinds: []
+    omitKinds:
+    - "podPreset"
+    customResources: []
+    cachingPolicies: []
+    onlySpinnakerManaged: true
+    checkPermissionsOnStartup: false
+aws:
+  enabled: true
+  lambda:
+    enabled: true
+  accounts:
+  - name: "awswurmdev"
+    lambdaEnabled: true
+    requiredGroupMembership: []
+    providerVersion: "v1"
+    permissions: {}
+    accountId: "732813442182"
+    assumeRole: "role/CA-ROL-Spinnaker-Managed-role"
+    lifecycleHooks: []
+    regions:
+    - name: "us-east-1"
+ecs:
+  enabled: true
+  accounts:
+  - name: "ecswurmdev"
+    permissions: {}
+    awsAccount: "awswurmdev"

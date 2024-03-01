@@ -1,0 +1,57 @@
+{
+ "application": "myfirstapp",
+ "id": "00ad99f0-8e70-48d8-ba3a-c4a39c029041",
+ "index": 2,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "deploy-green\u0026routetraffice",
+ "parameterConfig": [],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "bluegreenk8s",
+   "alias": "runJob",
+   "application": "myfirstapp",
+   "cloudProvider": "kubernetes",
+   "credentials": "bluegreenk8s",
+   "manifest": {
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+     "name": "hello-world-job"
+    },
+    "spec": {
+     "completions": 1,
+     "parallelism": 1,
+     "template": {
+      "metadata": {
+       "name": "hello-world-job"
+      },
+      "spec": {
+       "containers": [
+        {
+         "command": [
+          "/bin/sh",
+          "-c",
+          "echo \"scripts in \"\ncurl -I http://bgbellca.wurm.opsmx.net/\n"
+         ],
+         "image": "opsmxdev/apline-with-curl",
+         "name": "hello-world-job"
+        }
+       ],
+       "restartPolicy": "Never"
+      }
+     }
+    }
+   },
+   "name": "Run Job (Manifest)",
+   "refId": "3",
+   "requisiteStageRefIds": [],
+   "source": "text",
+   "type": "runJobManifest"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1633693039358"
+}

@@ -1,0 +1,55 @@
+{
+ "application": "demoapp1",
+ "id": "e4c51571-45a1-4cc5-a9a8-5386112ff992",
+ "index": 3,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "scale-down",
+ "parameterConfig": [
+  {
+   "default": "1",
+   "description": "",
+   "hasOptions": false,
+   "label": "Scale Number",
+   "name": "number",
+   "options": [
+    {
+     "value": ""
+    }
+   ],
+   "pinned": false,
+   "required": true
+  }
+ ],
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "action": "scale_down",
+   "capacity": {},
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "demoapp1-nginx-deploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "demoapp1",
+    "cluster": "demoapp1-nginx-deploy",
+    "detail": "deploy",
+    "stack": "nginx"
+   },
+   "name": "Resize Server Group",
+   "refId": "5",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [],
+   "resizeType": "incr",
+   "scaleNum": "${parameters.number}",
+   "target": "current_asg_dynamic",
+   "targetHealthyDeployPercentage": 100,
+   "type": "resizeServerGroup"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1635847221000"
+}

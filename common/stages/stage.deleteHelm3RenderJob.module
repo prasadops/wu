@@ -1,0 +1,15 @@
+{
+  "name": "Delete Helm3-Generator",
+  "type": "deleteManifest",
+  "refId": "stage-deletehelm3renderjob-module",
+  "app": "{{ var "application" }}",
+  "requisiteStageRefIds": {{ var "requisiteStageRefIds" ?: [] }},
+  "account": "{{ var "deployTo" }}-{{ var "location" }}",
+  "cloudProvider": "kubernetes",
+  "location": "{{ var "generatorNamespace" ?: "default" }}",
+  "manifestName": "job ${generator_name}",
+  "mode": "static",
+  "options": {
+    "cascading": true
+  }
+}

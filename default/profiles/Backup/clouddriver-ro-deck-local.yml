@@ -1,0 +1,64 @@
+sql:
+  enabled: true
+  taskRepository:
+    enabled: true
+  cache:
+    enabled: true
+    readBatchSize: 500
+    writeBatchSize: 300
+  scheduler:
+    enabled: true
+  connectionPools:
+    default:
+      default: true
+      jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+      user: clouddriver_service
+      password: OpsMx2021
+    tasks:
+      user: clouddriver_service
+      password: OpsMx2021
+      jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+  migration:
+    user: clouddriver_migrate
+    password: OpsMx2021
+    jdbcUrl: jdbc:mysql://spin-db-wurm-instance-1-us-east-1c.cyjw4hmntwfy.us-east-1.rds.amazonaws.com:3306/clouddriver?enabledTLSProtocols=TLSv1.2
+
+redis:
+  enabled: false
+  cache:
+    enabled: false
+  scheduler:
+    enabled: false
+  taskRepository:
+    enabled: false
+
+spinnaker:
+  extensibility:
+    plugins-root-path: /opt/clouddriver/plugins
+    plugins:
+      Armory.ObservabilityPlugin:
+        enabled: true
+        config:
+          metrics:
+            additionalTags:
+              service: spin-clouddriver-ro-deck
+            prometheus:
+              enabled: true
+              meterRegistryConfig:
+                armoryRecommendedFiltersEnabled: true
+                
+    repositories:
+      armory-observability-plugin-releases:
+        url: https://raw.githubusercontent.com/armory-plugins/armory-observability-plugin-releases/master/repositories.json
+
+management:
+  metrics.distribution:
+    percentiles[http.server.requests]: 0.95, 0.99
+    percentiles-histogram[http.server.requests]: true
+    sla[http.server.requests]: 300ms, 500ms
+  endpoints.web:
+    exposure.include: health,info,aop-prometheus
+    management.endpoints.web.base-path: /
+    path-mapping.prometheus: prometheus_metrics
+  server.port: 8008
+

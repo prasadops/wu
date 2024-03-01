@@ -1,0 +1,4 @@
+services:
+  redis:
+    baseUrl: redis://oes-redis-clouddriver:6379
+    enabled: true

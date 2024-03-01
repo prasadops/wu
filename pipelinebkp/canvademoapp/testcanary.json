@@ -1,0 +1,13 @@
+{
+ "application": "canvademoapp",
+ "id": "7116ffd9-e7a6-45d1-86f0-51a156d20078",
+ "index": 4,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "testcanary",
+ "spelEvaluator": "v4",
+ "stages": [],
+ "triggers": [],
+ "updateTs": "1638404759000"
+}

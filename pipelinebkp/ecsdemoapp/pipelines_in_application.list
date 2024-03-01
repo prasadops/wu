@@ -1,0 +1,8 @@
+Blue-GreenECS-Deploy
+alb-weight-modify
+BlueDeployScale-Up
+GreenDeployScale-Up
+GreenDeployScale-Down
+Scale
+CanaryAnalysis
+RollBack

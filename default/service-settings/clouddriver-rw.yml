@@ -1,0 +1,17 @@
+#artifactId: quay.io/opsmxpublic/ubi8-spin-clouddriver:v3.12.0-git
+#artifactId: quay.io/opsmxpublic/ubi8-spin-clouddriver:1.27.0-v4.0-alpha
+artifactId: quay.io/opsmxpublic/ubi8-spin-clouddriver:tag-version-8.0.4-apl-shard-all-fix-dockertag-cli
+kubernetes:
+  volumes:
+  - id: oes-cacerts
+    type: secret
+    mountPath: /etc/pki/ca-trust/extracted/java
+  podAnnotations:
+    moniker.spinnaker.io/application: spin
+    prometheus.io/path: /aop-prometheus
+    prometheus.io/port: '8008'
+    prometheus.io/scrape: 'true'    
+  useExecHealthCheck: true
+  customHealthCheckExecCommands: ["wget", "--no-check-certificate", "--spider", "-q", "http://localhost:8008/health"] 
+env: 
+  JAVA_OPTS: "-XX:MaxRAMPercentage=100.0"

@@ -1,0 +1,24 @@
+{
+ "application": "loadtest",
+ "disabled": true,
+ "id": "unknown",
+ "index": 200,
+ "lastModifiedBy": "admin",
+ "name": "Deploy Pipe1",
+ "notifications": [],
+ "parameterConfig": [],
+ "schema": "v2",
+ "stages": [],
+ "template": {
+  "artifactAccount": "front50ArtifactCredentials",
+  "reference": "spinnaker://DeployToECS:version1",
+  "type": "front50/pipelineTemplate"
+ },
+ "triggers": [],
+ "type": "templatedPipeline",
+ "updateTs": "1636085754000",
+ "variables": {
+  "clusterid": "pipe1",
+  "waitime": 30
+ }
+}

@@ -1,0 +1,92 @@
+{
+ "application": "oestest",
+ "id": "a752296e-e592-43a1-b48a-03e0e803455e",
+ "index": 8,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "hanumesh.kumar@opsmx.io",
+ "limitConcurrent": true,
+ "name": "aws-spinnaker",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "clusters": [
+    {
+     "account": "awswurmdev",
+     "application": "oestest",
+     "availabilityZones": {
+      "us-east-1": [
+       "us-east-1a",
+       "us-east-1b",
+       "us-east-1c",
+       "us-east-1d",
+       "us-east-1e",
+       "us-east-1f"
+      ]
+     },
+     "capacity": {
+      "desired": 1,
+      "max": 1,
+      "min": 1
+     },
+     "cloudProvider": "aws",
+     "cooldown": 10,
+     "copySourceCustomBlockDeviceMappings": false,
+     "ebsOptimized": false,
+     "enabledMetrics": [],
+     "freeFormDetails": "myapp",
+     "healthCheckGracePeriod": 600,
+     "healthCheckType": "EC2",
+     "iamRole": "BaseIAMRole",
+     "instanceMonitoring": false,
+     "instanceType": "t2.micro",
+     "keyPair": "EC2Keys",
+     "loadBalancers": [
+      "multiclouddemo-phani-prodloadbal"
+     ],
+     "moniker": {
+      "app": "oestest",
+      "detail": "myapp",
+      "stack": "restapp"
+     },
+     "provider": "aws",
+     "securityGroups": [
+      "sg-01a2a7e74bdb58651"
+     ],
+     "spotPrice": "",
+     "stack": "restapp",
+     "strategy": "highlander",
+     "subnetType": "external (spinEC2vpc)",
+     "suspendedProcesses": [],
+     "tags": {},
+     "targetGroups": [],
+     "targetHealthyDeployPercentage": 100,
+     "terminationPolicies": [
+      "Default"
+     ],
+     "useAmiBlockDeviceMappings": false
+    }
+   ],
+   "name": "Deploy",
+   "refId": "1",
+   "requisiteStageRefIds": [
+    "2"
+   ],
+   "type": "deploy"
+  },
+  {
+   "cloudProvider": "aws",
+   "cloudProviderType": "aws",
+   "name": "Find Image from Tags",
+   "packageName": "restapp-all-20210830121355-trusty",
+   "refId": "2",
+   "regions": [
+    "us-east-1"
+   ],
+   "requisiteStageRefIds": [],
+   "tags": {},
+   "type": "findImageFromTags"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1648100632011"
+}

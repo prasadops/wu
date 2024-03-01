@@ -1,0 +1,23 @@
+{
+ "accounts": "default,k8s-account,upgradetest",
+ "cloudProviders": "kubernetes",
+ "createTs": "1638443923235",
+ "email": "anoop@opsmx.io",
+ "instancePort": 80,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "name": "mynewdemoapp",
+ "permissions": {
+  "EXECUTE": [
+   "admin"
+  ],
+  "READ": [
+   "admin"
+  ],
+  "WRITE": [
+   "admin"
+  ]
+ },
+ "trafficGuards": [],
+ "updateTs": "1638443923235",
+ "user": "anoop@opsmx.io"
+}

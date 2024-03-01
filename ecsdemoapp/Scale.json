@@ -1,0 +1,36 @@
+{
+ "application": "ecsdemoapp",
+ "id": "fc55528a-2d29-430f-8b89-a8ddfad76212",
+ "index": 5,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "admin",
+ "limitConcurrent": true,
+ "name": "Scale",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "allowScaleDownActive": false,
+   "cloudProvider": "ecs",
+   "cloudProviderType": "ecs",
+   "cluster": "ecsdemoapp-ecs-bluedeploy",
+   "credentials": "canva-devecs",
+   "moniker": {
+    "app": "ecsdemoapp",
+    "cluster": "ecsdemoapp-ecs-bluedeploy",
+    "detail": "bluedeploy",
+    "stack": "ecs"
+   },
+   "name": "Scale Down Cluster",
+   "preferLargerOverNewer": "false",
+   "refId": "1",
+   "regions": [
+    "us-east-1"
+   ],
+   "remainingFullSizeServerGroups": 5,
+   "requisiteStageRefIds": [],
+   "type": "scaleDownCluster"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1635891044000"
+}

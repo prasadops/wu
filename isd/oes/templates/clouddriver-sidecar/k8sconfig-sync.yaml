@@ -1,0 +1,47 @@
+---
+# Source: oes/templates/clouddriver-sidecar/k8sconfig-sync.yaml
+apiVersion: v1
+data:
+  k8config-sync.sh: |
+    #!/bin/bash
+    export GIT_CLONE_PARAM=$(cat /tmp/secret/gitcloneparam)
+    export GIT_URL=$(cat /tmp/secret/dynamicaccountsgituri)
+    export DYNAMIC_ACCOUNTS_REPO=$(cat /tmp/secret/dynamicAccRepository)
+
+    dir=/opsmx/
+    mkdir -p $dir
+    echo " ####### Cloning the git Repo  #################"
+    cd $dir
+    git clone -c http.sslVerify=false $GIT_CLONE_PARAM
+    cd $DYNAMIC_ACCOUNTS_REPO/
+    cat clouddriver-local.yml |grep -i /opsmx/ |cut -f3 -d"/" > $dir/config_files.txt
+    cat $dir/config_files.txt
+    for config in $(cat $dir/config_files.txt)
+    do
+      kubectl get secrets $config -o=jsonpath='{.data.*}'|base64 -d > $dir/$config
+    done
+    ######################################## loop starts ###################
+    while true
+    do
+      sleep 60s
+    localt=$(date -r clouddriver-local.yml -u +"%Y-%m-%d%H:%M:%S")
+    echo $localt
+    git pull
+    gitt=$(date -r clouddriver-local.yml -u +"%Y-%m-%d%H:%M:%S")
+    echo $gitt
+      if [ $gitt != $localt ]
+      then
+        echo new clouddriver-local.yml was uploaded to git Repo
+        cat clouddriver-local.yml |grep -i /opsmx/ |cut -f3 -d"/" > $dir/config_files.txt
+        cat $dir/config_files.txt
+        for config in $(cat $dir/config_files.txt)
+        do
+          kubectl get secrets $config -o=jsonpath='{.data.*}'|base64 -d > $dir/$config
+        done
+      else
+        echo no changes in clouddriver-local.yml
+      fi
+    done
+kind: ConfigMap
+metadata:
+  name: k8config-sync

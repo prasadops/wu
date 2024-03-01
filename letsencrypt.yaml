@@ -1,0 +1,86 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"cert-manager.io/v1","kind":"Issuer","metadata":{"annotations":{},"name":"letsencrypt-oes-spin","namespace":"oes"},"spec":{"acme":{"email":"srinivas@opsmx.io","preferredChain":"","privateKeySecretRef":{"name":"demo-authtls"},"server":"https://acme-v02.api.letsencrypt.org/directory","solvers":[{"http01":{"ingress":{"class":"nginx"}}}]}}}
+    meta.helm.sh/release-name: oes
+    meta.helm.sh/release-namespace: oes
+  creationTimestamp: "2022-07-21T06:48:53Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  managedFields:
+  - apiVersion: cert-manager.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        .: {}
+        f:acme:
+          .: {}
+          f:lastRegisteredEmail: {}
+          f:uri: {}
+        f:conditions: {}
+    manager: controller
+    operation: Update
+    time: "2022-07-21T06:48:53Z"
+  - apiVersion: cert-manager.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:meta.helm.sh/release-name: {}
+          f:meta.helm.sh/release-namespace: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/managed-by: {}
+      f:spec:
+        .: {}
+        f:acme:
+          .: {}
+          f:email: {}
+          f:preferredChain: {}
+          f:privateKeySecretRef:
+            .: {}
+            f:name: {}
+          f:server: {}
+          f:solvers: {}
+    manager: helm
+    operation: Update
+    time: "2022-07-21T06:48:53Z"
+  - apiVersion: cert-manager.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2023-03-08T14:08:12Z"
+  name: letsencrypt-oes-spin
+  namespace: oes
+  resourceVersion: "161850390"
+  uid: d3294896-46a8-41f0-982b-476b27184b56
+spec:
+  acme:
+    email: srinivas@opsmx.io
+    preferredChain: ""
+    privateKeySecretRef:
+      name: demo-authtls
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+status:
+  acme:
+    lastRegisteredEmail: srinivas@opsmx.io
+    uri: https://acme-v02.api.letsencrypt.org/acme/acct/300144410
+  conditions:
+  - lastTransitionTime: "2022-07-21T06:48:53Z"
+    message: The ACME account was registered with the ACME server
+    observedGeneration: 1
+    reason: ACMEAccountRegistered
+    status: "True"
+    type: Ready

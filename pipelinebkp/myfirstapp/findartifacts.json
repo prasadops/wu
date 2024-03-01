@@ -1,0 +1,28 @@
+{
+ "application": "myfirstapp",
+ "id": "6941f0b7-d0b7-4d70-be02-ab1998c1d197",
+ "index": 6,
+ "keepWaitingPipelines": false,
+ "lastModifiedBy": "anoop@opsmx.io",
+ "limitConcurrent": true,
+ "name": "findartifacts",
+ "spelEvaluator": "v4",
+ "stages": [
+  {
+   "account": "bluegreenk8s",
+   "app": "myfirstapp",
+   "cloudProvider": "kubernetes",
+   "cluster": "deployment nginx-deployment-v1",
+   "criteria": "newest",
+   "kind": "deployment",
+   "location": "bluedeploy",
+   "mode": "dynamic",
+   "name": "Find Artifacts From Resource (Manifest)",
+   "refId": "1",
+   "requisiteStageRefIds": [],
+   "type": "findArtifactsFromResource"
+  }
+ ],
+ "triggers": [],
+ "updateTs": "1638447325309"
+}
